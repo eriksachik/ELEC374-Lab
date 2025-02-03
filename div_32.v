@@ -1,4 +1,4 @@
-module div_32_gate(
+module div_32(
     input wire [31:0] a_dividend,
     input wire [31:0] b_divisor,
     output reg [63:0] c_quotient_and_remainder
