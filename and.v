@@ -1,7 +1,11 @@
 module and_gate(
-	input wire [31:0] A, B, 
-	output wire [31:0] C
+    input [31:0] A, B,
+    output [31:0] Y
 );
-
-assign C = A & B;
+    genvar i;
+    generate
+	    for (i = 0; i < 32; i = i + 1) begin : and_loop
+		assign Y[i] = A[i] & B[i]; // Bitwise and operation
+        end
+    endgenerate
 endmodule
