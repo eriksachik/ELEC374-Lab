@@ -1,4 +1,4 @@
-module register64 #(parameter DATA_WIDTH_IN = 64, DATA_WIDTH_OUT = 64, INIT = 34'h0)(
+module register64 #(parameter DATA_WIDTH_IN = 64, DATA_WIDTH_OUT = 64, INIT = 64'h0)(
 	input clear, clock, enable, 
 	input [DATA_WIDTH_IN-1:0]BusMuxOut,
 	output wire [DATA_WIDTH_OUT-1:0]BusMuxIn
