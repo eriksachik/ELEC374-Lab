@@ -9,7 +9,7 @@ module DataPath(
     input wire [3:0] ALUControl,    // Control signals for ALU operation
     input wire IncPC,  // Increment PC control signal
     output wire [31:0] PC,  // Program counter
-    output wire [63:0] Z,   // ALU output (result, now 64-bit)
+    output wire [63:0] Z,   // ALU output (64-bit result now for Z)
     output wire [31:0] HI,  // HI register (for multiplication)
     output wire [31:0] LO,  // LO register (for multiplication)
     output wire Zero       // Zero flag from ALU
@@ -39,7 +39,9 @@ register register_HI(clear, clock, 1'b1, BusMuxOut, HI);  // HI Register (for mu
 register register_LO(clear, clock, 1'b1, BusMuxOut, LO);  // LO Register (for multiplication)
 register register_RA(clear, clock, RAin, A, BusMuxInRA);  // Register A
 register register_RB(clear, clock, RBin, B, BusMuxInRB);  // Register B
-register register_RZ(clear, clock, RZin, Zregin, BusMuxInRZ);  // Z register (ALU result)
+
+// 64-bit Register for Z
+register64 register_Z(clear, clock, RZin, ALUOut64, Z);  // 64-bit Register for Z (storing ALU result)
 
 // General-purpose registers R0 to R15
 register register_R0(clear, clock, 1'b1, BusMuxOut, R0Out); 
@@ -85,7 +87,7 @@ Encoder32to5 encoder(
     .select(BusMuxControl)  // Select signal from Control Unit (5-bit)
 );
 
-// The result of the ALU operation is stored in Z register (64 bits)
+// The result of the ALU operation is stored in the 64-bit Z register
 assign Z = (RZin) ? ALUOut64 : Zregin;  // ALU result (64-bit for full operation)
 
 // The program counter is incremented by 1 on each instruction fetch
