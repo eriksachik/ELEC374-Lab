@@ -1,4 +1,4 @@
-module BusMuxEncoder( 
+module Encoder32to5( 
     input wire [31:0] DataIn, // One-hot encoded inputs from control signals
     output reg [4:0] select
 );
