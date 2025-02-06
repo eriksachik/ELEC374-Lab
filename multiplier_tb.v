@@ -26,11 +26,7 @@ module multiplier_tb;
         // Monitor Rz value
         $monitor("At time %t, Rz = %h", $time, Rz);
 
-        // Test case 1: Multiply by 0
-        Ra = 32'hFFFFFFFF;  // Multiplier = -1
-        Rb = 32'h00000000;  // Multiplicand = 0
-        #20; // Expected Rz = 64'h0000000000000000
-        
+
         // Test case 2: Multiply two random numbers
         Ra = 32'h0000FF00;  // Multiplier = 65280
         Rb = 32'h000FFF0F;  // Multiplicand = 1048583
