@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module register64 #(parameter DATA_WIDTH_IN = 64, DATA_WIDTH_OUT = 64, INIT = 64'h0)(
 	input clear, clock, enable, 
 	input [DATA_WIDTH_IN-1:0]BusMuxOut,
