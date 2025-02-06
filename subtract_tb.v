@@ -6,7 +6,7 @@ module subtract_tb(input a, output b);
 	reg[31:0] Ra;
 	reg[31:0] Rb;
 	
-	subtract SUB(Ra, Rb, Rz);
+	Subtract SUB(Ra, Rb, Rz);
 	
 		initial
 				begin
