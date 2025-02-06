@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 // Ripple Carry Adder
 module adder(A, B, Result);
 
