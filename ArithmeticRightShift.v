@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module ArithmeticRightShift(
     input [31:0] unshifted,
     output [31:0] shifted
