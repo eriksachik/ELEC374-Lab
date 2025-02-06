@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module DataPath(
 	input wire clock, clear,
 	input wire [31:0] A, 
