@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module div_32(
     input wire [31:0] a_dividend,
     input wire [31:0] b_divisor,
