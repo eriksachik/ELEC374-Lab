@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module Bus (
 	//Mux
 	input [31:0]BusMuxInRZ, input [31:0]BusMuxInRA, input [31:0]BusMuxInRB,
