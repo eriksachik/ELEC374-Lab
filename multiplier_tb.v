@@ -1,42 +1,54 @@
-`timescale 1ns/10ps 
+`timescale 1ns/10ps
 module multiplier_tb;
 
-    wire [63:0] Rz;
-    reg [31:0] Ra;
-    reg [31:0] Rb;
-    reg clk, reset;
-    
+    reg clk;                   // Clock signal
+    reg reset;                 // Reset signal
+    reg [31:0] Mplr, Mcnd;     // Multiplier and multiplicand inputs
+    wire [63:0] Y;             // 64-bit product output
+
     // Instantiate the multiplier module
-    multiplier MUL(.Mplr(Ra), .Mcnd(Rb), .Y(Rz));
-    
-    // Generate clock signal
-    always #5 clk = ~clk;
-    
+    multiplier uut (
+        .clk(clk),
+        .reset(reset),
+        .Mplr(Mplr),
+        .Mcnd(Mcnd),
+        .Y(Y)
+    );
+
+    // Clock generation
+    always #5 clk = ~clk;  // Toggle clock every 5 ns, 10 ns period
+
     initial begin
         // Initialize signals
         clk = 0;
         reset = 1;
-        Ra = 32'b0;
-        Rb = 32'b0;
+        Mplr = 32'd0;
+        Mcnd = 32'd0;
 
-        // Apply reset
-        #10;
-        reset = 0;
-        
-        // Monitor Rz value
-        $monitor("At time %t, Rz = %h", $time, Rz);
+        // Reset the multiplier
+        #10 reset = 0;  // Deassert reset
 
+        // Test case 1: Multiply 2 positive numbers
+        Mplr = 32'd15;
+        Mcnd = 32'd10;
+        #20;  // Wait for 20 ns
 
-        // Test case 2: Multiply two random numbers
-        Ra = 32'h0000FF00;  // Multiplier = 65280
-        Rb = 32'h000FFF0F;  // Multiplicand = 1048583
-        #20; // Expected Rz = 65280 * 1048583
-        
-        // Test case 3: Multiply a negative and a positive number
-        Ra = 32'hFFFFFFFF;  // Multiplier = -1
-        Rb = 32'h000FFF0F;  // Multiplicand = 1048583
-        #20; // Expected Rz = -1048583 (64-bit negative result)
-        
-        $finish; // End simulation
+        // Test case 2: Multiply a positive and a negative number
+        Mplr = 32'd15;
+        Mcnd = 32'd-10;
+        #20;  // Wait for 20 ns
+
+        // Test case 3: Multiply 2 negative numbers
+        Mplr = 32'd-15;
+        Mcnd = 32'd-10;
+        #20;  // Wait for 20 ns
+
+        // Test case 4: Multiply by zero
+        Mplr = 32'd0;
+        Mcnd = 32'd10;
+        #20;  // Wait for 20 ns
+
+        // Finish simulation
+        $finish;
     end
 endmodule
