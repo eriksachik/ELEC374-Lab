@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module ALU (
     input wire [31:0] A,               // First operand (32 bits)
     input wire [31:0] B,               // Second operand (32 bits)
