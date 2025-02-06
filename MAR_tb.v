@@ -6,7 +6,7 @@ module MAR_tb;
     reg [31:0] dIn;        // 32-bit data input to MAR
 
     // Instantiate the MAR module
-    MAR #(9'b0) mar (
+    MAR mar (
         .clk(clk),
         .clr(clr),
         .dIn(dIn),
@@ -15,7 +15,7 @@ module MAR_tb;
     );
 
     // Clock generation
-    always #5 clk = ~clk;
+    always #5 clk = ~clk;   // Toggle clock every 5ns
 
     initial begin
         // Initialize signals
@@ -28,12 +28,12 @@ module MAR_tb;
         #10;
         clr = 0;   // Assert reset
         #10;
-        clr = 1;   // Deassert reset, address should be reset to VAL (default 0)
+        clr = 1;   // Deassert reset, address should reset to 0
 
         // Test case 2: Enable the register (Rin = 1) and load a value into address
         Rin = 1;   
         dIn = 32'hFFFFF123;  // Load the lower 9 bits (0x123) into address
-        #10;  // Expected address = 9'b000100100011
+        #10;  // Expected address = 9'b000100100011 (lower 9 bits of 0x123)
 
         // Test case 3: Disable the register (Rin = 0), value should not change
         Rin = 0;
