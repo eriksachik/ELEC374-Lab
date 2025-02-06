@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module MAR
     #(parameter VAL = 0)(
     input wire clk,
