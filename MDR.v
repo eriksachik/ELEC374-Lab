@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module MDR(
     input wire clk,
     input wire clr,
