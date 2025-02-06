@@ -1,21 +1,21 @@
 `timescale 1ns/10ps
-module MAR #(parameter VAL = 0)(
-    input wire clk,          // Clock
-    input wire clr,          // Clear signal
-    input wire [31:0] dIn,   // 32-bit data input (memory address)
-    input wire Rin,          // Register input signal
-    output reg [8:0] address // 9-bit address output (Memory Address Register)
+module MAR (
+    input wire clk,            // Clock input
+    input wire clr,            // Clear signal
+    input wire [31:0] dIn,     // 32-bit input data (memory address)
+    input wire Rin,            // Register input signal
+    output reg [8:0] address   // 9-bit address output (Memory Address Register)
 );
 
     always @(posedge clk or negedge clr) begin
-        if (~clr) begin
-            address <= VAL;    // Reset address to VAL
-        end else if (Rin) begin
-            address <= dIn[8:0]; // Capture lower 9 bits of the input data into address
-        end
+        if (clr == 0)          // When clear is low, reset the address to 0
+            address <= 9'b0;
+        else if (Rin)          // When Rin is high, load the lower 9 bits of dIn to address
+            address <= dIn[8:0];
     end
 
     initial begin
-        address = VAL;  // Initialize address to VAL at the start
+        address = 9'b0;       // Initialize address to 0 at the start
     end
+
 endmodule
