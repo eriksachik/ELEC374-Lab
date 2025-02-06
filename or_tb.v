@@ -1,9 +1,9 @@
 `timescale 1ns/10ps 
 module or_tb(input a, input b);
 
-	wire Rz[31:0];
-	reg Ra[31:0];
-	reg Rb[31:0];
+	wire [31:0] Rz;
+	reg [31:0] Ra;
+	reg [31:0] Rb;
 	
 	or_gate OR(Ra, Rb, Rz);
 	
