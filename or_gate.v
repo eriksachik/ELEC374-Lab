@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module or_gate(
     input [31:0] A, B,
     output [31:0] Y
