@@ -29,23 +29,23 @@ module multiplier_tb;
         #10 reset = 0;  // Deassert reset
 
         // Test case 1: Multiply 2 positive numbers
-        Mplr = 32'd15;
-        Mcnd = 32'd10;
+        Mplr = 32'h0000000F;  // 15 in hex
+        Mcnd = 32'h0000000A;  // 10 in hex
         #20;  // Wait for 20 ns
 
         // Test case 2: Multiply a positive and a negative number
-        Mplr = 32'd15;
-        Mcnd = 32'd-10;
+        Mplr = 32'h0000000F;  // 15 in hex
+        Mcnd = 32'hFFFFFFF6;  // -10 in hex (2's complement)
         #20;  // Wait for 20 ns
 
         // Test case 3: Multiply 2 negative numbers
-        Mplr = 32'd-15;
-        Mcnd = 32'd-10;
+        Mplr = 32'hFFFFFFF1;  // -15 in hex (2's complement)
+        Mcnd = 32'hFFFFFFF6;  // -10 in hex (2's complement)
         #20;  // Wait for 20 ns
 
         // Test case 4: Multiply by zero
-        Mplr = 32'd0;
-        Mcnd = 32'd10;
+        Mplr = 32'h00000000;  // 0 in hex
+        Mcnd = 32'h0000000A;  // 10 in hex
         #20;  // Wait for 20 ns
 
         // Finish simulation
