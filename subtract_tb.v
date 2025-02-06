@@ -18,9 +18,9 @@ module subtract_tb(input [31:0] A, input [31:0] B, output [31:0] Result);
         Rb = 32'h00000001;
         #20;
         
-        // Test case 3: A = 32'h12345678, B = 32'h87654321
-        Ra = 32'h12345678;  // Expected Result = 32'h8FABCDEF (0x12345678 - 0x87654321)
-        Rb = 32'h87654321;
+       
+        Ra = 32'hFFFFEEEE;  
+        Rb = 32'h00000123;
         #20;
     end
 endmodule
