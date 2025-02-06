@@ -1,15 +1,15 @@
-
 `timescale 1ns/10ps 
-module and_tb(input a, output b);
+module or_tb(input a, input b);
 
-	wire[31:0] Rz;
-	reg[31:0] Ra;
-	reg[31:0] Rb;
+	wire Rz[31:0];
+	reg Ra[31:0];
+	reg Rb[31:0];
 	
-	and_gate AND(Ra, Rb, Rz);
+	or_gate OR(Ra, Rb, Rz);
 	
 		initial
 				begin
+				
 			Ra = 32'h00000000;
 			Rb = 32'hFFF000FF;
 			#20
@@ -18,7 +18,6 @@ module and_tb(input a, output b);
 			#20
 			Ra = 32'hFFFFFFFF;
 			Rb = 32'hFFF000FF;
-			
-			
-				end
+					
+					end
 endmodule
