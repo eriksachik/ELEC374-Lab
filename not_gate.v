@@ -1,7 +1,7 @@
 `timescale 1ns/10ps 
 module not_gate(
     input [31:0] A,
-    output reg [31:0] Y
+    output [31:0] Y
 );
     genvar i;
     generate
