@@ -1,5 +1,5 @@
 `timescale 1ns/10ps 
-module negate_tb(input a, output b);
+module Negate_tb(input a, output b);
 
     wire [31:0] Rz;
     reg [31:0] Ra;
