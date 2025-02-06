@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 //S - Select | D0,D1 - Input
 module mux2to1(
 Y, D0, D1, S
