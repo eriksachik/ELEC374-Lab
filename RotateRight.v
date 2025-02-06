@@ -1,3 +1,4 @@
+`timescale 1ns/10ps 
 module RotateRight(
     input [31:0] unrotated,
     output [31:0] rotated
