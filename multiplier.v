@@ -21,19 +21,19 @@ module multiplier (
 
             for (i = 0; i < 32; i = i + 2) begin
                 // Get the current pair of bits (booth_code) for Booth's algorithm
-                booth_code = {Mplr[i + 1], Mplr[i], (i == 0 ? 1'b0 : Mplr[i - 1])};
+                booth_code <= {Mplr[i + 1], Mplr[i], (i == 0 ? 1'b0 : Mplr[i - 1])};
                 
                 // Booth's multiplication algorithm
                 case (booth_code)
-                    3'b001, 3'b010: temp = Mcnd << i;                // Shift left
-                    3'b011: temp = Mcnd << (i + 1);                  // Double shift left
-                    3'b100: temp = (~(Mcnd << (i + 1))) + 1;         // Negate and shift
-                    3'b101, 3'b110: temp = ~(Mcnd << i) + 1;         // Negate and shift
-                    default: temp = 64'b0;                            // Default case for no operation
+                    3'b001, 3'b010: temp <= Mcnd << i;                // Shift left
+                    3'b011: temp <= Mcnd << (i + 1);                  // Double shift left
+                    3'b100: temp <= (~(Mcnd << (i + 1))) + 1;         // Negate and shift
+                    3'b101, 3'b110: temp <= ~(Mcnd << i) + 1;         // Negate and shift
+                    default: temp <= 64'b0;                            // Default case for no operation
                 endcase
-
+                
                 // Accumulate the partial product
-                partial_sum = partial_sum + temp;
+                partial_sum <= partial_sum + temp;
             end
 
             // Store the final product in Y
