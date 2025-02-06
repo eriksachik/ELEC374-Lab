@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module multiplier_tb (input a  output b;
+module multiplier_tb (input a, output b);
 
   
     reg [31:0] Ra, Rb;     // Multiplier and multiplicand inputs
