@@ -1,43 +1,37 @@
-`timescale 1ns/10ps 
+`timescale 1ns/10ps
 module div_32(
     input wire [31:0] a_dividend,
     input wire [31:0] b_divisor,
     output reg [63:0] c_quotient_and_remainder
 );
-    integer i; 
-    // Sign-extended registers
-    reg [32:0] dividend_se;
-    reg [64:0] quotient_and_remainder_se;
+    integer i;
+    
+    // Registers for quotient and remainder
+    reg [64:0] quotient_and_remainder_se; 
+    reg [31:0] divisor;  
 
     always @(a_dividend or b_divisor) begin
-        // Initialize divisor and remainder
-        quotient_and_remainder_se[31:0] = b_divisor; // Divisor
-        quotient_and_remainder_se[64:32] = 0; // Upper part (A = remainder)
-        dividend_se[31:0] = a_dividend; // Dividend
+        // Initialize quotient, remainder, and divisor
+        quotient_and_remainder_se = {32'b0, a_dividend};  // Remainder (A) initialized to 0, lower 32 bits store dividend
+        divisor = b_divisor;  // Store divisor separately
 
         for (i = 0; i < 32; i = i + 1) begin
-            // Step 1: Shift left A and Q by one binary position
+            // Step 1: Shift left the remainder and quotient
             quotient_and_remainder_se = quotient_and_remainder_se << 1;
 
-            // Perform subtraction or addition based on sign of A
-            if (quotient_and_remainder_se[64] == 0) begin
-                // A >= 0: Subtract divisor
-                quotient_and_remainder_se[64:32] = quotient_and_remainder_se[64:32] - b_divisor;
-            end else begin
-                // A < 0: Add divisor back
-                quotient_and_remainder_se[64:32] = quotient_and_remainder_se[64:32] + b_divisor;
-            end
+            // Step 2: Subtract divisor from the remainder part
+            quotient_and_remainder_se[64:32] = quotient_and_remainder_se[64:32] - divisor;
 
-            // Update Q (quotient bit) based on the sign of A
-            if (quotient_and_remainder_se[64] == 0) begin
-                quotient_and_remainder_se[0] = 1; // A >= 0
+            // Step 3: If remainder is negative, restore it and set quotient bit to 0
+            if (quotient_and_remainder_se[64] == 1) begin
+                quotient_and_remainder_se[64:32] = quotient_and_remainder_se[64:32] + divisor; 
+                quotient_and_remainder_se[0] = 0; 
             end else begin
-                quotient_and_remainder_se[0] = 0; // A < 0
+                quotient_and_remainder_se[0] = 1; 
             end
         end
 
-        // Output quotient and remainder
+        // Assign the final quotient and remainder
         c_quotient_and_remainder <= quotient_and_remainder_se[63:0];
     end
 endmodule
-
