@@ -1,3 +1,4 @@
+`timescale 1ns/10ps
 module mux32to1 (
     input [31:0] R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, RHI, RLO, RZHI, RZLO, RPC, RMDR, RINPORT, RC,       // 24 data inputs
     input [4:0] Sel,      // 5-bit select signal (can select up to 32 options)
