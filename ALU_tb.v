@@ -44,4 +44,65 @@ module ALU_tb;
 
         // Test 5: Negate operation
         A = 32'h00000005;
-        B = 32'h00000000; // B is not used in this operat
+        B = 32'h00000000; // B is not used in this operation
+        ALUControl = 4'b0100; // Negate operation
+        #20;
+
+        // Test 6: NOT operation
+        A = 32'h00000005;
+        B = 32'h00000000; // B is not used in this operation
+        ALUControl = 4'b0101; // NOT operation
+        #20;
+
+        // Test 7: Arithmetic Right Shift
+        A = 32'h00000005;
+        B = 32'h00000000; // B is not used in this operation
+        ALUControl = 4'b0110; // Arithmetic Right Shift operation
+        #20;
+
+        // Test 8: Multiply operation
+        A = 32'h00000005;
+        B = 32'h00000003;
+        ALUControl = 4'b0111; // Multiply operation
+        #20;
+
+        // Test 9: Left Shift
+        A = 32'h00000005;
+        B = 32'h00000000; // B is not used in this operation
+        ALUControl = 4'b1000; // Left Shift operation
+        #20;
+
+        // Test 10: Logical Right Shift
+        A = 32'h00000005;
+        B = 32'h00000000; // B is not used in this operation
+        ALUControl = 4'b1001; // Logical Right Shift operation
+        #20;
+
+        // Test 11: Division
+        A = 32'h0000000A;
+        B = 32'h00000002;
+        ALUControl = 4'b1010; // Division operation
+        #20;
+
+        // Test 12: Rotate Left
+        A = 32'h00000005;
+        B = 32'h00000000; // B is not used in this operation
+        ALUControl = 4'b1011; // Rotate Left operation
+        #20;
+
+        // Test 13: Rotate Right
+        A = 32'h00000005;
+        B = 32'h00000000; // B is not used in this operation
+        ALUControl = 4'b1100; // Rotate Right operation
+        #20;
+        
+        // Test finish
+        $finish;
+    end
+
+    // Monitor outputs
+    initial begin
+        $monitor("A = %h, B = %h, ALUControl = %b, ALUOut = %h, Zero = %b", A, B, ALUControl, ALUOut, Zero);
+    end
+
+endmodule
