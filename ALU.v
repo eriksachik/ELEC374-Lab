@@ -14,21 +14,22 @@ wire [31:0] rotate_left_out, rotate_right_out;
 wire [63:0] mul_out, div_out;   // 64-bit results for multiplication/division
 
 // Instantiate the 32-bit operations
-ArithmeticRightShift ars (.A(A), .B(B), .ALUOut(arith_right_shift_out));
-LogicalRightShift lrs (.A(A), .B(B), .ALUOut(log_right_shift_out));
-LeftShift ls (.A(A), .B(B), .ALUOut(left_shift_out));
-Negate negate (.A(A), .ALUOut(neg_out));
-Not not_gate (.A(A), .ALUOut(not_out));
-Or or_gate (.A(A), .B(B), .ALUOut(or_out));
-RotateLeft rl (.A(A), .B(B), .ALUOut(rotate_left_out));
-RotateRight rr (.A(A), .B(B), .ALUOut(rotate_right_out));
-Subtract subtract (.A(A), .B(B), .ALUOut(sub_out));
-Adder adder (.A(A), .B(B), .ALUOut(add_out));
-And and_gate (.A(A), .B(B), .ALUOut(and_out));
+ArithmeticRightShift ars (.unshifted(A), .shifted(arith_right_shift_out));
+LogicalRightShift lrs (.unshifted(A), .shifted(log_right_shift_out));
+LeftShift ls (.unshifted(A), .shifted(left_shift_out));
+
+Negate negate (.A(A), .C(neg_out));
+not_gate Not (.A(A), .Y(not_out));
+or_gate Or (.A(A), .B(B), .Y(or_out));
+RotateLeft rl (.unrotated(A), .rotated(rotate_left_out));
+RotateRight rr (.unrotated(A), .rotated(rotate_right_out));
+Subtract subtract (.A(A), .B(B), .Result(sub_out));
+adder Adder (.A(A), .B(B), .Result(add_out));
+and_gate AND  (.A(A), .B(B), .Y(and_out));
 
 // Instantiate the 64-bit operations
-Div_32 div_32 (.A(A), .B(B), .ALUOut(div_out));  // 64-bit result (quotient, remainder)
-Multiplier mul (.A(A), .B(B), .ALUOut(mul_out)); // 64-bit result
+div_32 Div_32 (.a_dividend(A), .b_divisor(B), .c_quotient_and_remainder(div_out));  // 64-bit result (quotient, remainder)
+multiplier mul (.Mplr(A), .Mcnd(B), .Y(mul_out)); // 64-bit result
 
 // ALU control logic to select the operation
 always @(*) begin
