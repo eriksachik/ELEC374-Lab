@@ -88,7 +88,7 @@ Encoder32to5 encoder(
 // The result of the ALU operation is stored in the 64-bit Z register
 assign Z = (RZin) ? ALUOut64 : Zregin;  // ALU result (64-bit for full operation)
 
-// The program counter is incremented by 1 on each instruction fetch
+// The program counter is incremented by 1 on each instruction fetchs
 assign TempPC = (IncPC) ? PC + 1 : PC;
 
 endmodule
