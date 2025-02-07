@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module DataPath_tb;
+module datapath_tb;
 
     // Declare testbench variables
     reg clock;
