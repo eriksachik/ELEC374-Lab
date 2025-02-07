@@ -1,37 +1,37 @@
-`timescale 1ns/10ps 
-module Encoder32to5( 
-    input wire [31:0] DataIn, // One-hot encoded inputs from control signals
-    output reg [4:0] select
+module mux32to1 (
+    input [31:0] R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, RHI, RLO, RZHI, RZLO, RPC, RMDR, RINPORT, RC,       // 24 data inputs
+    input [4:0] Sel,      // 5-bit select signal (can select up to 32 options)
+    output reg Y          // Output
 );
 
-always @(*) begin
-    case (DataIn)
-        32'h00000001: select = 5'd0;   // R0out
-        32'h00000002: select = 5'd1;   // R1out
-        32'h00000004: select = 5'd2;   // R2out
-        32'h00000008: select = 5'd3;   // R3out
-        32'h00000010: select = 5'd4;   // R4out
-        32'h00000020: select = 5'd5;   // R5out
-        32'h00000040: select = 5'd6;   // R6out
-        32'h00000080: select = 5'd7;   // R7out
-        32'h00000100: select = 5'd8;   // R8out
-        32'h00000200: select = 5'd9;   // R9out
-        32'h00000400: select = 5'd10;  // R10out
-        32'h00000800: select = 5'd11;  // R11out
-        32'h00001000: select = 5'd12;  // R12out
-        32'h00002000: select = 5'd13;  // R13out
-        32'h00004000: select = 5'd14;  // R14out
-        32'h00008000: select = 5'd15;  // R15out
-        32'h00010000: select = 5'd16;  // HIout
-        32'h00020000: select = 5'd17;  // LOout
-        32'h00040000: select = 5'd18;  // Zhighout
-        32'h00080000: select = 5'd19;  // Zlowout
-        32'h00100000: select = 5'd20;  // PCout
-        32'h00200000: select = 5'd21;  // MDRout
-        32'h00400000: select = 5'd22;  // In.Portout
-        32'h00800000: select = 5'd23;  // Cout
-        default: select = 5'd31;       // Default (safe fallback)
-    endcase
-end
+    always @(*) begin
+        case (Sel)
+            5'd0:  Y = R0[0];
+            5'd1:  Y = R1[1];
+            5'd2:  Y = R2[2];
+            5'd3:  Y = R3[3];
+            5'd4:  Y = R4[4];
+            5'd5:  Y = R5[5];
+            5'd6:  Y = R6[6];
+            5'd7:  Y = R7[7];
+            5'd8:  Y = R8[8];
+            5'd9:  Y = R9[9];
+            5'd10: Y = R10[10];
+            5'd11: Y = R11[11];
+            5'd12: Y = R12[12];
+            5'd13: Y = R13[13];
+            5'd14: Y = R14[14];
+            5'd15: Y = R15[15];
+            5'd16: Y = RHI[16];
+            5'd17: Y = RLO[17];
+            5'd18: Y = RZHI[18];
+            5'd19: Y = RZLO[19];
+            5'd20: Y = RPC[20];
+            5'd21: Y = RMDR[21];
+            5'd22: Y = RINPORT[22];
+            5'd23: Y = RC[23];
+            default: Y = 1'b0; // If Sel > 23, output 0
+        endcase
+    end
 
 endmodule
