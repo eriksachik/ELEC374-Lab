@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module booth_multiplier(
+module multiplier(
     input  wire [31:0] Mplr,
     input  wire [31:0] Mcnd,
     output reg  [63:0] Y
