@@ -24,17 +24,36 @@ module multiplier(
         booth = { Mplr_SE[31:0], 1'b0 };  // Booth is 33 bits
 
         // Perform Booth's multiplication
-        for (i = 0; i < 32; i = i + 1) begin
-            // Check the lower two bits of booth to decide on operation
-            if (booth[1:0] == 2'b01) begin
-                accumulated = accumulated + (Mcnd_SE << i); // Add shifted Mcnd
-            end
-            else if (booth[1:0] == 2'b10) begin
-                accumulated = accumulated - (Mcnd_SE << i); // Subtract shifted Mcnd
-            end
+        // for (i = 0; i < 32; i = i + 1) begin
+        //     // Check the lower two bits of booth to decide on operation
+        //     if (booth[1:0] == 2'b01) begin
+        //         accumulated = accumulated + (Mcnd_SE << i); // Add shifted Mcnd
+        //     end
+        //     else if (booth[1:0] == 2'b10) begin
+        //         accumulated = accumulated - (Mcnd_SE << i); // Subtract shifted Mcnd
+        //     end
 
-            // Arithmetic right shift booth by 1 (preserve sign)
-            booth = {booth[33], booth[33:1]}; 
+        //     // Arithmetic right shift booth by 1 (preserve sign)
+        //     booth = {booth[33], booth[33:1]}; 
+        // end
+
+
+        for (i = 0; i < 32; i = i + 2) begin
+            case (booth[2:0]) // Check lower three bits for Booth encoding
+                3'b001, 3'b010: // + Mcnd
+                    accumulated = accumulated + (Mcnd_SE << i);
+                3'b011: // + 2*Mcnd
+                    accumulated = accumulated + (Mcnd_SE << (i + 1));
+                3'b100: // -2*Mcnd
+                    accumulated = accumulated - (Mcnd_SE << (i + 1));
+                3'b101, 3'b110: // - Mcnd
+                    accumulated = accumulated - (Mcnd_SE << i);
+                default: // 000 or 111 → No operation
+                    accumulated = accumulated;
+            endcase
+        
+            // Arithmetic right shift booth by 2 (preserve sign)
+            booth = {booth[33], booth[33], booth[33:2]}; 
         end
 
         // Store the final result into Y
