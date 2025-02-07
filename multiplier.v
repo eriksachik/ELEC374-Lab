@@ -1,46 +1,39 @@
-`timescale 1ns/10ps
-module multiplier (
-    input clk,                  // Clock input
-    input reset,                // Reset signal
-    input [31:0] Mplr,          // Multiplier
-    input [31:0] Mcnd,          // Multiplicand
-    output reg [63:0] Y         // 64-bit product (final result)
+`timescale 1ns / 1ps
+
+module booth_multiplier(
+    input  wire [31:0] Mplr,
+    input  wire [31:0] Mcnd,
+    output reg  [63:0] Y
 );
+    reg [63:0] accum;
+    reg [63:0] multiplicand_ext;
+    reg [63:0] multiplier_ext;
+    reg [33:0] booth;        // <--- Declare here (outside procedural block)
 
-    reg [63:0] accum;           // Accumulator for the product
-    reg [63:0] multiplicand_ext; // Sign-extended multiplicand
-    reg [63:0] multiplier_ext;  // Sign-extended multiplier
-    reg [33:0] booth;           // Booth's algorithm requires 33-bit register
-    integer i;                  // Loop variable
+    integer i;
 
-    always @(posedge clk or posedge reset) begin
-        if (reset) begin
-            Y <= 64'b0;            // Reset the product to zero
-            accum <= 64'b0;        // Reset accumulator
-        end else begin
-            // Sign extend the multiplier and multiplicand
-            multiplicand_ext <= {{32{Mcnd[31]}}, Mcnd};  // Sign extend multiplicand to 64-bits
-            multiplier_ext    <= {{32{Mplr[31]}}, Mplr};  // Sign extend multiplier to 64-bits
+    always @(*) begin
+        // Sign-extend A, B into 64-bit
+        multiplicand_ext = {{32{A[31]}}, A};
+        multiplier_ext    = {{32{B[31]}}, B};
 
-            accum <= 64'd0;        // Clear accumulator at the start of multiplication
+        accum = 64'd0;
 
-            // Initialize the booth with the lower 32 bits of the multiplier plus an extra bit (total 33 bits)
-            booth <= {multiplier_ext[31:0], 1'b0};  
+        // Initialize booth with the lower 32 bits of the multiplier plus an extra bit
+        booth = { multiplier_ext[31:0], 1'b0 }; // 33 bits total
 
-            // Perform Booth multiplication
-            for (i = 0; i < 32; i = i + 1) begin
-                case (booth[1:0])  // Booth's algorithm logic
-                    2'b01: accum <= accum + (multiplicand_ext << i);  // Add the shifted multiplicand
-                    2'b10: accum <= accum - (multiplicand_ext << i);  // Subtract the shifted multiplicand
-                    default: ;  // No operation for 00 or 11
-                endcase
-
-                // Perform arithmetic right shift of booth (preserving sign)
-                booth <= {booth[33], booth[33:1]};  // Use non-blocking shift
-            end
-
-            // Store the final result into Y
-            Y <= accum;
+        // Perform Booth multiplication
+        for (i = 0; i < 32; i = i + 1) begin
+            case (booth[1:0])
+                2'b01: accum = accum + (multiplicand_ext << i);
+                2'b10: accum = accum - (multiplicand_ext << i);
+                default: /* no-op */;
+            endcase
+            // Arithmetic right shift the booth value by 1
+            booth = { {1{booth[33]}}, booth[33:1] };
         end
+
+        PRODUCT = accum;
     end
+
 endmodule
