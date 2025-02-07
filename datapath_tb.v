@@ -6,13 +6,16 @@ reg Pcout, Zlowout, MDRout, R3out, R7out, MARin, Zin;
 reg PCin, MDRin, R3in, R4in, R7in, Yin, Read, AND;
 reg [31:0] instruction;
 reg clock, clear;
+reg IncPC; // Declare missing IncPC signal
 
-// Outputs
+// Declare the control and output signals required for the simulation
 wire [31:0] PC;
 wire [63:0] Z;
 wire [31:0] HI;
 wire [31:0] LO;
 wire Zero;
+wire [31:0] Mdatain; // Declare missing Mdatain signal
+wire IRin; // Declare missing IRin signal
 
 datapath DUT(
     .Pcout(Pcout), .Zlowout(Zlowout), .MDRout(MDRout), .R3out(R3out), .R7out(R7out),
@@ -45,7 +48,7 @@ initial begin
     Pcout = 1; MARin = 1; IncPC = 1; Zin = 1; #20;
 
     // T1: Read instruction, load into MDR and IR
-    Zlowout = 1; PCin = 1; Read = 1; Mdatain[31:0] = instruction; MDRin = 1; #20;
+    Zlowout = 1; PCin = 1; Read = 1; Mdatain = instruction; MDRin = 1; #20;
 
     // T2: Store instruction in IR
     MDRout = 1; IRin = 1; #20;
