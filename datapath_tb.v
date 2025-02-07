@@ -1,156 +1,72 @@
 `timescale 1ns/10ps
-
 module datapath_tb;
 
-    // Declare testbench variables
-    reg clock;
-    reg clear;
-    reg [31:0] instruction;
-    reg [31:0] A;
-    reg [31:0] B;
-    reg RZout, RAout, RBout;
-    reg RAin, RBin, RZin;
-    reg [3:0] ALUControl;
-    reg IncPC;
-    wire [31:0] PC;
-    wire [63:0] Z;
-    wire [31:0] HI;
-    wire [31:0] LO;
-    wire Zero;
+// Declare testbench variables
+reg Pcout, Zlowout, MDRout, R3out, R7out, MARin, Zin;
+reg PCin, MDRin, R3in, R4in, R7in, Yin, Read, AND;
+reg [31:0] instruction;
+reg clock, clear;
 
-    // Instantiate the DataPath module
-    DataPath uut (
-        .clock(clock),
-        .clear(clear),
-        .instruction(instruction),
-        .A(A),
-        .B(B),
-        .RZout(RZout),
-        .RAout(RAout),
-        .RBout(RBout),
-        .RAin(RAin),
-        .RBin(RBin),
-        .RZin(RZin),
-        .ALUControl(ALUControl),
-        .IncPC(IncPC),
-        .PC(PC),
-        .Z(Z),
-        .HI(HI),
-        .LO(LO),
-        .Zero(Zero)
-    );
+// Outputs
+wire [31:0] PC;
+wire [63:0] Z;
+wire [31:0] HI;
+wire [31:0] LO;
+wire Zero;
 
-    // Generate clock signal
-    always begin
-        #10 clock = ~clock;  // Toggle clock every 10ns
-    end
+datapath DUT(
+    .Pcout(Pcout), .Zlowout(Zlowout), .MDRout(MDRout), .R3out(R3out), .R7out(R7out),
+    .MARin(MARin), .Zin(Zin), .PCin(PCin), .MDRin(MDRin), .R3in(R3in), .R4in(R4in),
+    .R7in(R7in), .Yin(Yin), .Read(Read), .AND(AND),
+    .instruction(instruction), .clock(clock), .clear(clear),
+    .PC(PC), .Z(Z), .HI(HI), .LO(LO), .Zero(Zero)
+);
 
-    initial begin
-        // Initialize all signals
-        clock = 0;
-        clear = 0;
-        instruction = 32'h00000000;
-        A = 32'h00000000;
-        B = 32'h00000000;
-        RZout = 0;
-        RAout = 0;
-        RBout = 0;
-        RAin = 0;
-        RBin = 0;
-        RZin = 0;
-        ALUControl = 4'b0000;  // Add operation
-        IncPC = 0;
+// Clock generation
+initial begin
+    clock = 0;
+    forever #10 clock = ~clock; // 50 MHz clock
+end
 
-        // Apply reset
-        clear = 1;
-        #20;
-        clear = 0;
+// Test procedure
+initial begin
+    // Initialize all control signals
+    clear = 1;
+    Pcout = 0; Zlowout = 0; MDRout = 0; R3out = 0; R7out = 0; MARin = 0; Zin = 0;
+    PCin = 0; MDRin = 0; R3in = 0; R4in = 0; R7in = 0; Yin = 0; Read = 0; AND = 0;
+    instruction = 32'hA2B80000; // 32-bit AND opcode (for R4, R3, R7)
 
-        // Test 1: Test ALU Add operation
-        A = 32'h00000005;
-        B = 32'h00000003;
-        ALUControl = 4'b0000;  // Add operation
-        #20;
+    // Step 1: Reset the Datapath
+    clear = 1; #20;
+    clear = 0; #20;
 
-        // Test 2: Test ALU Subtract operation
-        A = 32'h00000005;
-        B = 32'h00000003;
-        ALUControl = 4'b0001;  // Subtract operation
-        #20;
+    // Step 2: Simulate control sequence for "and" operation (R4, R3, R7)
+    // T0: Fetch instruction
+    Pcout = 1; MARin = 1; IncPC = 1; Zin = 1; #20;
 
-        // Test 3: Test ALU AND operation
-        A = 32'h00000005;
-        B = 32'h00000003;
-        ALUControl = 4'b0010;  // AND operation
-        #20;
+    // T1: Read instruction, load into MDR and IR
+    Zlowout = 1; PCin = 1; Read = 1; Mdatain[31:0] = instruction; MDRin = 1; #20;
 
-        // Test 4: Test ALU OR operation
-        A = 32'h00000005;
-        B = 32'h00000003;
-        ALUControl = 4'b0011;  // OR operation
-        #20;
+    // T2: Store instruction in IR
+    MDRout = 1; IRin = 1; #20;
 
-        // Test 5: Test ALU Negate operation
-        A = 32'h00000005;
-        B = 32'h00000000;  // B is not used for this operation
-        ALUControl = 4'b0100;  // Negate operation
-        #20;
+    // T3: Load R3 with value
+    R3out = 1; Yin = 1; #20;
 
-        // Test 6: Test ALU NOT operation
-        A = 32'h00000005;
-        B = 32'h00000000;  // B is not used for this operation
-        ALUControl = 4'b0101;  // NOT operation
-        #20;
+    // T4: Perform AND operation with R7
+    R7out = 1; AND = 1; Zin = 1; #20;
 
-        // Test 7: Test ALU Arithmetic Right Shift operation
-        A = 32'h00000005;
-        B = 32'h00000000;  // B is not used for this operation
-        ALUControl = 4'b0110;  // Arithmetic Right Shift operation
-        #20;
+    // T5: Store result in R4
+    Zlowout = 1; R4in = 1; #20;
 
-        // Test 8: Test ALU Multiply operation
-        A = 32'h00000005;
-        B = 32'h00000003;
-        ALUControl = 4'b0111;  // Multiply operation
-        #20;
+    // Finish test
+    $finish;
+end
 
-        // Test 9: Test ALU Left Shift operation
-        A = 32'h00000005;
-        B = 32'h00000000;  // B is not used for this operation
-        ALUControl = 4'b1000;  // Left Shift operation
-        #20;
-
-        // Test 10: Test ALU Logical Right Shift operation
-        A = 32'h00000005;
-        B = 32'h00000000;  // B is not used for this operation
-        ALUControl = 4'b1001;  // Logical Right Shift operation
-        #20;
-
-        // Test 11: Test ALU Division operation
-        A = 32'h0000000A;
-        B = 32'h00000002;
-        ALUControl = 4'b1010;  // Division operation
-        #20;
-
-        // Test 12: Test ALU Rotate Left operation
-        A = 32'h00000005;
-        B = 32'h00000000;  // B is not used for this operation
-        ALUControl = 4'b1011;  // Rotate Left operation
-        #20;
-
-        // Test 13: Test ALU Rotate Right operation
-        A = 32'h00000005;
-        B = 32'h00000000;  // B is not used for this operation
-        ALUControl = 4'b1100;  // Rotate Right operation
-        #20;
-
-        // Test finish
-        $finish;
-    end
-
-    // Monitor outputs
-    initial begin
-        $monitor("PC = %h, ALUOut = %h, Z = %h, HI = %h, LO = %h, Zero = %b", PC, ALUOut, Z, HI, LO, Zero);
-    end
+// Monitor outputs
+initial begin
+    $monitor("Time = %0t, instruction = %h, PC = %h, Z = %h, HI = %h, LO = %h, Zero = %b",
+             $time, instruction, PC, Z, HI, LO, Zero);
+end
 
 endmodule
