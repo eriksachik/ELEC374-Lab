@@ -1,73 +1,97 @@
-`timescale 1ns/10ps
-module datapath_tb;
-
-// Declare testbench variables
-reg Pcout, Zlowout, MDRout, R3out, R7out, MARin, Zin;
-reg PCin, MDRin, R3in, R4in, R7in, Yin, Read, AND;
-reg [31:0] instruction;  // This is where you set the instruction (opcode)
-reg clock, clear;
-reg IncPC; // Control signal for Incrementing PC
-
-// Declare the control and output signals required for the simulation
-wire [31:0] PC;
-wire [63:0] Z;
-wire [31:0] HI;
-wire [31:0] LO;
-wire Zero;
-
-datapath DUT(
-    .Pcout(Pcout), .Zlowout(Zlowout), .MDRout(MDRout), .R3out(R3out), .R7out(R7out),
-    .MARin(MARin), .Zin(Zin), .PCin(PCin), .MDRin(MDRin), .R3in(R3in), .R4in(R4in),
-    .R7in(R7in), .Yin(Yin), .Read(Read), .AND(AND),
-    .instruction(instruction), .clock(clock), .clear(clear),
-    .PC(PC), .Z(Z), .HI(HI), .LO(LO), .Zero(Zero)
+`timescale 1ns/10ps 
+module datapath(
+    input wire clock, 
+    input wire clear, 
+    input wire [31:0] instruction,  // Instruction input (IR)
+    input wire [31:0] A,  // ALU input A
+    input wire [31:0] B,  // ALU input B
+    input wire RZout, RAout, RBout,  // Control signals for output of registers
+    input wire RAin, RBin, RZin,     // Control signals for input to registers
+    input wire [3:0] ALUControl,    // Control signals for ALU operation
+    input wire IncPC,  // Increment PC control signal
+    output wire [31:0] PC,  // Program counter
+    output wire [63:0] Z,   // ALU output (64-bit result now for Z)
+    output wire [31:0] HI,  // HI register (for multiplication)
+    output wire [31:0] LO,  // LO register (for multiplication)
+    output wire Zero       // Zero flag from ALU
 );
 
-// Clock generation
-initial begin
-    clock = 0;
-    forever #10 clock = ~clock; // 50 MHz clock
-end
+// Internal wires for BusMux
+wire [31:0] BusMuxOut, BusMuxInRZ, BusMuxInRA, BusMuxInRB, ALUOut, TempPC;
+wire [63:0] ALUOut64; // 64-bit output for multiplication/division
+wire [63:0] Zregin;  // 64-bit temporary register to hold ALU result before Z
+wire [31:0] MDR;    // Memory Data Register (for storing memory results)
+wire [4:0] BusMuxControl; // BusMux control signals from Encoder
 
-// Test procedure
-initial begin
-    // Initialize all control signals
-    clear = 1;
-    Pcout = 0; Zlowout = 0; MDRout = 0; R3out = 0; R7out = 0; MARin = 0; Zin = 0;
-    PCin = 0; MDRin = 0; R3in = 0; R4in = 0; R7in = 0; Yin = 0; Read = 0; AND = 0;
-    instruction = 32'hA2B80000; // 32-bit AND opcode (for R4, R3, R7)
+// General-purpose Registers R0 to R15
+wire [31:0] R0Out, R1Out, R2Out, R3Out, R4Out, R5Out, R6Out, R7Out;
+wire [31:0] R8Out, R9Out, R10Out, R11Out, R12Out, R13Out, R14Out, R15Out;
 
-    // Step 1: Reset the Datapath
-    clear = 1; #20;
-    clear = 0; #20;
+// Registers (R0 to R15, HI, LO, etc.)
+register register_PC(clear, clock, IncPC, TempPC, PC);  // Program Counter Register
+register register_IR(clear, clock, 1'b1, instruction, BusMuxInRA);  // Instruction Register (IR)
 
-    // Step 2: Simulate control sequence for "and" operation (R4, R3, R7)
-    // T0: Fetch instruction
-    Pcout = 1; MARin = 1; IncPC = 1; Zin = 1; #20;
+// MAR and MDR Modules
+MAR mar(clear, clock, BusMuxOut, 1'b1, BusMuxInRA);  // Memory Address Register (MAR)
+MDR mdr(clear, clock, 1'b1, BusMuxOut, MDR);  // Memory Data Register (MDR)
 
-    // T1: Read instruction, load into MDR and IR
-    Zlowout = 1; PCin = 1; Read = 1; MDRin = 1; #20;
+// Register for HI and LO (used in multiplication/division)
+register register_HI(clear, clock, 1'b1, BusMuxOut, HI);  // HI Register (for multiplication)
+register register_LO(clear, clock, 1'b1, BusMuxOut, LO);  // LO Register (for multiplication)
+register register_RA(clear, clock, RAin, A, BusMuxInRA);  // Register A
+register register_RB(clear, clock, RBin, B, BusMuxInRB);  // Register B
 
-    // T2: Store instruction in IR
-    MDRout = 1; #20;
+// 64-bit Register for Z
+register64 register_Z(clear, clock, RZin, ALUOut64, Z);  // 64-bit Register for Z (storing ALU result)
 
-    // T3: Load R3 with value
-    R3out = 1; Yin = 1; #20;
+// General-purpose registers R0 to R15
+register register_R0(clear, clock, 1'b1, BusMuxOut, R0Out); 
+register register_R1(clear, clock, 1'b1, BusMuxOut, R1Out); 
+register register_R2(clear, clock, 1'b1, BusMuxOut, R2Out); 
+register register_R3(clear, clock, 1'b1, BusMuxOut, R3Out); 
+register register_R4(clear, clock, 1'b1, BusMuxOut, R4Out); 
+register register_R5(clear, clock, 1'b1, BusMuxOut, R5Out); 
+register register_R6(clear, clock, 1'b1, BusMuxOut, R6Out); 
+register register_R7(clear, clock, 1'b1, BusMuxOut, R7Out); 
+register register_R8(clear, clock, 1'b1, BusMuxOut, R8Out); 
+register register_R9(clear, clock, 1'b1, BusMuxOut, R9Out); 
+register register_R10(clear, clock, 1'b1, BusMuxOut, R10Out); 
+register register_R11(clear, clock, 1'b1, BusMuxOut, R11Out); 
+register register_R12(clear, clock, 1'b1, BusMuxOut, R12Out); 
+register register_R13(clear, clock, 1'b1, BusMuxOut, R13Out); 
+register register_R14(clear, clock, 1'b1, BusMuxOut, R14Out); 
+register register_R15(clear, clock, 1'b1, BusMuxOut, R15Out); 
 
-    // T4: Perform AND operation with R7
-    R7out = 1; AND = 1; Zin = 1; #20;
+// ALU Operation (using control signals)
+ALU alu(A, B, ALUControl, ALUOut64, Zero);
 
-    // T5: Store result in R4
-    Zlowout = 1; R4in = 1; #20;
+// BusMux (32:1 Multiplexer for Bus Selection)
+mux32to1 busMux(
+    .BusMuxin0(R0Out), .BusMuxin1(R1Out), .BusMuxin2(R2Out), .BusMuxin3(R3Out), 
+    .BusMuxin4(R4Out), .BusMuxin5(R5Out), .BusMuxin6(R6Out), .BusMuxin7(R7Out), 
+    .BusMuxin8(R8Out), .BusMuxin9(R9Out), .BusMuxin10(R10Out), .BusMuxin11(R11Out), 
+    .BusMuxin12(R12Out), .BusMuxin13(R13Out), .BusMuxin14(R14Out), .BusMuxin15(R15Out), 
+    .BusMuxin16(HI), .BusMuxin17(LO), .BusMuxin18(), .BusMuxin19(), 
+    .BusMuxin20(PC), .BusMuxin21(MDR), .BusMuxin22(), .BusMuxin23(),
+    .BusMuxOut(BusMuxOut),  // Output to the bus
+    .BusMuxControl(BusMuxControl) // Control signal to select the right input
+);
 
-    // Finish test
-    $finish;
-end
+// BusMuxControl signals generated by Encoder logic
+Encoder32to5 encoder(
+    .R0Out(R0Out), .R1Out(R1Out), .R2Out(R2Out), .R3Out(R3Out), 
+    .R4Out(R4Out), .R5Out(R5Out), .R6Out(R6Out), .R7Out(R7Out), 
+    .R8Out(R8Out), .R9Out(R9Out), .R10Out(R10Out), .R11Out(R11Out), 
+    .R12Out(R12Out), .R13Out(R13Out), .R14Out(R14Out), .R15Out(R15Out), 
+    .HIOut(HI), .LOOut(LO), .ZhighOut(), .ZlowOut(), .PCOut(PC), 
+    .MDROut(MDR), .InPortOut(), .C_sign_extended(), 
+    .select(BusMuxControl)  // Select signal from Control Unit (5-bit)
+);
 
-// Monitor outputs
-initial begin
-    $monitor("Time = %0t, instruction = %h, PC = %h, Z = %h, HI = %h, LO = %h, Zero = %b",
-             $time, instruction, PC, Z, HI, LO, Zero);
-end
+// The result of the ALU operation is stored in the 64-bit Z register
+assign Z = (RZin) ? ALUOut64 : Zregin;  // ALU result (64-bit for full operation)
+
+// The program counter is incremented by 1 on each instruction fetch
+assign TempPC = (IncPC) ? PC + 1 : PC;
 
 endmodule
