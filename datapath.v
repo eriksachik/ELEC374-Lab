@@ -1,5 +1,5 @@
 `timescale 1ns/10ps 
-module DataPath(
+module datapath(
     input wire clock, 
     input wire clear, 
     input wire [31:0] instruction,  // Instruction input (IR)
