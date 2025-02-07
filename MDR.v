@@ -2,17 +2,18 @@
 module MDR(
     input wire clk,
     input wire clr,
-    input wire [31:0] BusMuxOut,    
-    input wire [31:0] MdataIn,      
-    input wire MDRin,                
-    output reg [31:0] MDROut
+    input wire [31:0] BusMuxOut,    // Data from the bus
+    input wire [31:0] MdataIn,      // Data from memory
+    input wire MDRin,                // Enable signal for writing data to MDR
+    input wire Read,                 // Read control signal for selecting input source
+    output reg [31:0] MDROut        // Output from MDR
 );
-    always @(posedge clk or negedge clr)
-    begin
-        if (clr == 0)
-            MDROut <= 0;                  
-        else if (MDRin)
-				MDROut <= Read ? Mdatain : BusMuxOut;
-         
+    always @(posedge clk or negedge clr) begin
+        if (clr == 0) begin
+            MDROut <= 32'b0;  // Reset MDR to zero
+        end else if (MDRin) begin
+            // Select input based on the Read signal (0 = BusMuxOut, 1 = MdataIn)
+            MDROut <= (Read) ? MdataIn : BusMuxOut;
+        end
     end
 endmodule
