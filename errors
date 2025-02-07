@@ -1,42 +1,192 @@
-Error (12002): Port "HIOut" does not exist in macrofunction "encoder"
-Error (12002): Port "LOOut" does not exist in macrofunction "encoder"
-Error (12002): Port "MDROut" does not exist in macrofunction "encoder"
-Error (12002): Port "PCOut" does not exist in macrofunction "encoder"
-Error (12002): Port "R0Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R10Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R11Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R12Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R13Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R14Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R15Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R1Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R2Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R3Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R4Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R5Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R6Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R7Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R8Out" does not exist in macrofunction "encoder"
-Error (12002): Port "R9Out" does not exist in macrofunction "encoder"
-Error (12002): Port "BusMuxControl" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxOut" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin0" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin1" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin10" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin11" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin12" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin13" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin14" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin15" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin16" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin17" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin2" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin20" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin21" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin3" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin4" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin5" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin6" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin7" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin8" does not exist in macrofunction "busMux"
-Error (12002): Port "BusMuxin9" does not exist in macrofunction "busMux"
+Error (12014): Net "Z[63]", which fans out to "Z[63]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[63]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[62]", which fans out to "Z[62]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[62]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[61]", which fans out to "Z[61]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[61]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[60]", which fans out to "Z[60]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[60]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[59]", which fans out to "Z[59]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[59]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[58]", which fans out to "Z[58]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[58]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[57]", which fans out to "Z[57]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[57]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[56]", which fans out to "Z[56]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[56]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[55]", which fans out to "Z[55]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[55]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[54]", which fans out to "Z[54]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[54]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[53]", which fans out to "Z[53]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[53]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[52]", which fans out to "Z[52]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[52]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[51]", which fans out to "Z[51]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[51]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[50]", which fans out to "Z[50]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[50]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[49]", which fans out to "Z[49]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[49]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[48]", which fans out to "Z[48]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[48]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[47]", which fans out to "Z[47]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[47]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[46]", which fans out to "Z[46]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[46]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[45]", which fans out to "Z[45]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[45]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[44]", which fans out to "Z[44]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[44]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[43]", which fans out to "Z[43]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[43]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[42]", which fans out to "Z[42]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[42]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[41]", which fans out to "Z[41]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[41]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[40]", which fans out to "Z[40]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[40]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[39]", which fans out to "Z[39]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[39]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[38]", which fans out to "Z[38]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[38]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[37]", which fans out to "Z[37]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[37]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[36]", which fans out to "Z[36]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[36]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[35]", which fans out to "Z[35]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[35]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[34]", which fans out to "Z[34]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[34]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[33]", which fans out to "Z[33]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[33]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[32]", which fans out to "Z[32]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[32]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[31]", which fans out to "Z[31]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[31]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[30]", which fans out to "Z[30]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[30]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[29]", which fans out to "Z[29]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[29]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[28]", which fans out to "Z[28]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[28]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[27]", which fans out to "Z[27]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[27]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[26]", which fans out to "Z[26]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[26]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[25]", which fans out to "Z[25]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[25]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[24]", which fans out to "Z[24]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[24]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[23]", which fans out to "Z[23]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[23]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[22]", which fans out to "Z[22]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[22]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[21]", which fans out to "Z[21]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[21]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[20]", which fans out to "Z[20]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[20]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[19]", which fans out to "Z[19]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[19]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[18]", which fans out to "Z[18]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[18]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[17]", which fans out to "Z[17]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[17]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[16]", which fans out to "Z[16]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[16]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[15]", which fans out to "Z[15]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[15]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[14]", which fans out to "Z[14]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[14]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[13]", which fans out to "Z[13]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[13]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[12]", which fans out to "Z[12]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[12]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[11]", which fans out to "Z[11]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[11]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[10]", which fans out to "Z[10]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[10]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[9]", which fans out to "Z[9]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[9]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[8]", which fans out to "Z[8]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[8]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[7]", which fans out to "Z[7]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[7]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[6]", which fans out to "Z[6]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[6]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[5]", which fans out to "Z[5]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[5]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[4]", which fans out to "Z[4]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[4]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[3]", which fans out to "Z[3]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[3]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[2]", which fans out to "Z[2]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[2]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[1]", which fans out to "Z[1]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[1]"
+	Error (12015): Net is fed by "Z"
+Error (12014): Net "Z[0]", which fans out to "Z[0]", cannot be assigned more than one value
+	Error (12015): Net is fed by "register64:register_Z|BusMuxIn[0]"
+	Error (12015): Net is fed by "Z"
