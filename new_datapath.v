@@ -26,9 +26,9 @@ registerPC PC_reg(.clear(GlobalReset), .clock(Clock), .increment(PCin), .PCOut(P
 
 ALU ArithLogUnit(.A(R1), .B(R2), .ALUControl(ALUControl), .ALUOut(Z), .Zero(Zero));
 
-MDR mdr(.clk(Clock), .clr(GlobalReset), .BusMuxOut(BusMuxOut), .Mdatain(Mdatain), .MDRin(MDRin), .Read(Read), .MDROut(MDR));
+MDR mdr(.clk(Clock), .clr(GlobalReset), .BusMuxOut(BusMuxOut), .MdataIn(Mdatain), .MDRin(MDRin), .Read(Read), .MDROut(MDR));
 
-MAR mar(.clk(Clock), .clr(GlobalReset), .MDRin(MARin), .Read(1'b0), .address(marAddress));
+MAR mar(.clk(Clock), .clr(GlobalReset), .dIn(BusMuxOut), .Rin(1'b0), .address(marAddress));
 
 // register declarations
 
@@ -74,13 +74,13 @@ register IR_reg (
     .BusMuxOut(BusMuxOut), 
     .BusMuxIn(IR)          
 );
-register64 Z_reg (			// only 64-bit register
-    .clear(GlobalReset),
-    .clock(Clock),
-    .enable(Zin),         
-    .BusMuxOut(BusMuxOut), 
-    .BusMuxIn(Z)          
-);
+//register64 Z_reg (			// only 64-bit register
+//    .clear(GlobalReset),
+//    .clock(Clock),
+//    .enable(Zin),         
+//    .BusMuxOut(???ALUout???), 
+//    .BusMuxIn(Z)          
+//);
 
 // Bus Logic: 32-to-5 Encoder & 32-to-1 32-bit Mux
 
