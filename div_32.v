@@ -42,7 +42,7 @@ always @(*) begin
 
         // Adjust the sign of the quotient if necessary
         if (a_dividend[31] != b_divisor[31]) begin
-            q = -q;  // If dividend and divisor have different signs, negate the quotient
+            q = ~q;  // If dividend and divisor have different signs, negate the quotient
         end
 
         // Set the result to combine quotient and remainder
