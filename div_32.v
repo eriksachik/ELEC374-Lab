@@ -4,53 +4,52 @@ module div_32(
     input wire [31:0] b_divisor,
     output reg [63:0] c_quotient_and_remainder
 );
-    integer i;
-
-    // Registers for quotient and remainder
+    // Initialize registers
     reg [64:0] quotient_and_remainder_se; 
     reg [31:0] divisor;  
     reg [31:0] dividend;  
-    reg dividend_sign, divisor_sign;
+    reg [31:0] abs_q;
+    reg [31:0] abs_m;
+    reg [31:0] q;
+    integer i;
 
     always @(a_dividend or b_divisor) begin
-        // Determine the signs of the dividend and divisor
-        dividend_sign = a_dividend[31];
-        divisor_sign = b_divisor[31];
 
-        // Take absolute values for the division process
-        dividend = dividend_sign ? -a_dividend : a_dividend;
-        divisor = divisor_sign ? -b_divisor : b_divisor;
+        // Handle division by 0
+        if (b_divisor == 0) begin
+            c_quotient_and_remainder = {2*32{1'b1}};  
+        end else if (a_dividend == 0) begin
+            c_quotient_and_remainder = 0;  // If dividend is 0, return 0
+        end else begin
+            q = 0;
+            quotient_and_remainder_se = 0;
 
-        // Initialize quotient and remainder
-        quotient_and_remainder_se = {32'b0, dividend};  // Remainder (A) initialized to 0, lower 32 bits store dividend
+            // Get absolute values for signed division
+            abs_q = a_dividend[31] ? -a_dividend : a_dividend;
+            abs_m = b_divisor[31] ? -b_divisor : b_divisor;
 
-        for (i = 0; i < 32; i = i + 1) begin
-            // Step 1: Shift left the remainder and quotient
-            quotient_and_remainder_se = quotient_and_remainder_se << 1;
+            // Perform division using shift-and-subtract method
+            for (i = 31; i >= 0; i = i - 1) begin
+                quotient_and_remainder_se = quotient_and_remainder_se << 1;
+                quotient_and_remainder_se[0] = abs_q[i];
 
-            // Step 2: Subtract divisor from the remainder part
-            quotient_and_remainder_se[64:32] = quotient_and_remainder_se[64:32] - divisor;
+                quotient_and_remainder_se = quotient_and_remainder_se - abs_m;
 
-            // Step 3: If remainder is negative, restore it and set quotient bit to 0
-            if (quotient_and_remainder_se[64] == 1) begin
-                quotient_and_remainder_se[64:32] = quotient_and_remainder_se[64:32] + divisor; 
-                quotient_and_remainder_se[0] = 0; 
-            end else begin
-                quotient_and_remainder_se[0] = 1; 
+                if (quotient_and_remainder_se[64]) begin
+                    q[i] = 0;
+                    quotient_and_remainder_se = quotient_and_remainder_se + abs_m;
+                end else begin
+                    q[i] = 1;
+                end
             end
-        end
 
-        // After division, assign the quotient and remainder
-        c_quotient_and_remainder <= quotient_and_remainder_se[63:0];
+            // Adjust the quotient's sign based on the dividend and divisor signs
+            if (a_dividend[31] != b_divisor[31]) begin
+                q = -q;
+            end
 
-        // Step 4: Correct the signs of the quotient and remainder
-        if (dividend_sign ^ divisor_sign) begin  // If signs are different, negate the quotient
-            c_quotient_and_remainder[63:32] <= -c_quotient_and_remainder[63:32];  // Negate the quotient
-        end
-
-        // Ensure remainder sign follows dividend
-        if (dividend_sign) begin  // If dividend is negative
-            c_quotient_and_remainder[31:0] <= -c_quotient_and_remainder[31:0];  // Negate the remainder
+            // Assign the final quotient and remainder (combining quotient and remainder)
+            c_quotient_and_remainder = {quotient_and_remainder_se[63:32], q};
         end
     end
 endmodule
