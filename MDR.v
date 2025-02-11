@@ -8,8 +8,8 @@ module MDR(
     input wire Read,                 // Read control signal for selecting input source
     output reg [31:0] MDROut        // Output from MDR
 );
-    always @(posedge clk or negedge clr) begin
-        if (clr == 0) begin
+    always @(negedge clk or posedge clr) begin
+        if (clr) begin
             MDROut <= 32'b0;  // Reset MDR to zero
         end else if (MDRin) begin
             // Select input based on the Read signal (0 = BusMuxOut, 1 = MdataIn)

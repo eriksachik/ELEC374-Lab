@@ -11,7 +11,7 @@ reg [DATA_WIDTH_IN-1:0]q;
 
 initial q = INIT;
 
-always @ (posedge clock)
+always @ (negedge clock)
 
 		begin 
 		

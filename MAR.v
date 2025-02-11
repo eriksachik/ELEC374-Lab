@@ -7,8 +7,8 @@ module MAR (
     output reg [8:0] address   // 9-bit address output (Memory Address Register)
 );
 
-    always @(posedge clk or negedge clr) begin
-        if (clr == 0)          // When clear is low, reset the address to 0
+    always @(negedge clk or posedge clr) begin
+        if (clr)          // When clear is low, reset the address to 0
             address <= 9'b0;
         else if (Rin)          // When Rin is high, load the lower 9 bits of dIn to address
             address <= dIn[8:0];
