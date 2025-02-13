@@ -1,21 +1,14 @@
 `timescale 1ns/10ps
 module new_datapath(
 
-	input wire R1out, R2out, R3out, R4out, R5out, R6out, R7out,
-	input wire R1in, R2in, R3in, R4in, R5in, R6in, R7in,
+	input wire R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
+	input wire R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in,
 	input wire HIin, HIout, LOin, LOout, PCin, PCout, IRin, Zin, Zhiout, Zloout, Yin, MARin, MDRin, MDRout, Read, Clock, GlobalReset,
 	input wire [31:0] Mdatain,
-	input wire [3:0] ALUControl,
-	
-	
-	// using R1, R2 as conventional inputs
-	// using R3 as conventional output
-	output wire [4:0] testBusMuxControl,
-	output wire [31:0] testEncoderInput,
-	output wire [31:0] testMDRvalue,
+	input wire [4:0] ALUControl,
 	
 	output wire Zero,
-	output wire [31:0] R1, R2, R3, R4, R5, R6, R7,
+	output wire [31:0] R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15,
 	output wire [31:0] HI, LO, IR, PC, BusMuxOut, Y,
 	output wire [63:0] Z
 
@@ -36,47 +29,7 @@ MDR mdr(.clk(Clock), .clr(GlobalReset), .BusMuxOut(BusMuxOut), .MdataIn(Mdatain)
 
 MAR mar(.clk(Clock), .clr(GlobalReset), .dIn(BusMuxOut), .Rin(MARin), .address(marAddress));
 
-// DEBUGGING modules
-
-DEBUG32 dbgMDR(.debugWire(MDR), .debugOut(testMDRvalue), .clk(Clock));
-DEBUG dbg(.debugWire(BusMuxControl), .debugOut(testBusMuxControl), .clk(Clock));
-DEBUG32 dbg32(.debugWire({
-        1'b0,  // Bit 31 (unused)
-        1'b0,  // Bit 30 (unused)
-        1'b0,  // Bit 29 (unused)
-        1'b0,  // Bit 28 (unused)
-        1'b0,  // Bit 27 (unused)
-        1'b0,  // Bit 26 (unused)
-        1'b0,  // Bit 25 (unused)
-        1'b0,  // Bit 24 (unused)
-        1'b0,  // Bit 23 (unused)
-        1'b0,  // Bit 22 (unused)
-        1'b0,  // Bit 21 (unused)
-        1'b0,  // Bit 20 (unused)
-        1'b0,  // Bit 19 (unused)
-        1'b0,  // Bit 18 (unused)
-        1'b0,  // Bit 17 (unused)
-        1'b0,  // Bit 16 (unused)
-        HIout, // Bit 15 (HIout)
-        LOout, // Bit 14 (LOout)
-        Zhiout,// Bit 13 (Zhiout)
-        Zloout,// Bit 12 (Zloout)
-        PCout, // Bit 11 (PCout)
-        MDRout,// Bit 10 (MDRout)
-        1'b0,  // Bit 9 (unused)
-        1'b0,  // Bit 8 (unused)
-        R7out,  // Bit 7 (unused)
-        R6out,  // Bit 6 (unused)
-        R5out,  // Bit 5 (unused)
-        R4out,  // Bit 4 (unused)
-        R3out, // Bit 3 (R3out)
-        R2out, // Bit 2 (R2out)
-        R1out, // Bit 1 (R1out)
-        1'b0   // Bit 0 (R0out, unused)
-    }), .debugOut(testEncoderInput), .clk(Clock));
-
 // register declarations
-
 
 register Y_reg (
     .clear(GlobalReset),
@@ -85,7 +38,13 @@ register Y_reg (
     .BusMuxOut(BusMuxOut), // Input data for Y
     .BusMuxIn(Y)          // Stored value of Y
 );
-
+register R0_reg (
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(R0in),         
+    .BusMuxOut(BusMuxOut), 
+    .BusMuxIn(R0)          
+);
 register R1_reg (
     .clear(GlobalReset),
     .clock(Clock),
@@ -121,7 +80,7 @@ register R5_reg (
     .BusMuxOut(BusMuxOut), 
     .BusMuxIn(R5)          
 );
-register R_reg (
+register R6_reg (
     .clear(GlobalReset),
     .clock(Clock),
     .enable(R6in),         
@@ -134,6 +93,62 @@ register R7_reg (
     .enable(R7in),         
     .BusMuxOut(BusMuxOut), 
     .BusMuxIn(R7)          
+);
+register R8_reg (
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(R8in),         
+    .BusMuxOut(BusMuxOut), 
+    .BusMuxIn(R8)          
+);
+register R9_reg (
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(R9in),         
+    .BusMuxOut(BusMuxOut), 
+    .BusMuxIn(R9)          
+);
+register R10_reg (
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(R10in),         
+    .BusMuxOut(BusMuxOut), 
+    .BusMuxIn(R10)          
+);
+register R11_reg (
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(R11in),         
+    .BusMuxOut(BusMuxOut), 
+    .BusMuxIn(R11)          
+);
+register R12_reg (
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(R12in),         
+    .BusMuxOut(BusMuxOut), 
+    .BusMuxIn(R12)          
+);
+register R13_reg (
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(R13in),         
+    .BusMuxOut(BusMuxOut), 
+    .BusMuxIn(R13)          
+);
+register R14_reg (
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(R14in),         
+    .BusMuxOut(BusMuxOut), 
+    .BusMuxIn(R14)          
+);
+register R15_reg (
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(R15in), 
+    .BusMuxOut(BusMuxOut), 
+    .BusMuxIn(R15)          
 );
 register HI_reg (
     .clear(GlobalReset),
@@ -163,49 +178,6 @@ register64 Z_reg (			// only 64-bit register
     .BusMuxOut(ALU_Output), 
     .BusMuxIn(Z)          
 );
-
-// Bus Logic: 32-to-5 Encoder & 32-to-1 32-bit Mux
-
-// BusMuxControl signals generated manually for testing
-//Encoder32to5 encoder(
-//    .DataIn({
-//        1'b0,  // Bit 31 (unused)
-//        R1out,  // Bit 30 (unused)
-//        R2out,  // Bit 29 (unused)
-//        R3out,  // Bit 28 (unused)
-//        R4out,  // Bit 27 (unused)
-//        R5out,  // Bit 26 (unused)
-//        R6out,  // Bit 25 (unused)
-//        R7out,  // Bit 24 (unused)
-//        1'b0,  // Bit 23 (unused)
-//        1'b0,  // Bit 22 (unused)
-//        MDRout,  // Bit 21 (unused)
-//        PCout,  // Bit 20 (unused)
-//        Zloout,  // Bit 19 (unused)
-//        Zhiout,  // Bit 18 (unused)
-//        LOout,  // Bit 17 (unused)
-//        HIout,  // Bit 16 (unused)
-//        1'b0,// Bit 12 (Zloout)
-//        1'b0, // Bit 11 (PCout)
-//        1'b0,// Bit 10 (MDRout)
-//        1'b0,  // Bit 9 (unused)
-//        1'b0,  // Bit 8 (unused)
-//        1'b0,  // Bit 7 (unused)
-//        1'b0,  // Bit 6 (unused)
-//        1'b0,  // Bit 5 (unused)
-//        1'b0,  // Bit 4 (unused)
-//        1'b0, // Bit 3 (R3out)
-//        1'b0, // Bit 2 (R2out)
-//        1'b0, // Bit 1 (R1out)
-//		  1'b0,
-//		  1'b0,
-//		  1'b0,
-//        1'b0   // Bit 0 (R0out, unused)
-//    }),
-//    .select(BusMuxControl)  // Select signal from Control Unit (5-bit)
-//);
-
-
 Encoder32to5 encoder(
     .DataIn({
         1'b0,      // Bit 31 (unused)
@@ -218,37 +190,37 @@ Encoder32to5 encoder(
         1'b0,      // Bit 24 (unused)
         1'b0,      // Bit 23 (unused)
         1'b0,      // Bit 22 (unused)
-        MDRout,    // Bit 21 (MDRout)
-        PCout,     // Bit 20 (PCout)
-        Zloout,    // Bit 19 (Zloout)
-        Zhiout,    // Bit 18 (Zhiout)
-        LOout,     // Bit 17 (LOout)
-        HIout,     // Bit 16 (HIout)
-        1'b0,      // Bit 15 (unused)
-        1'b0,      // Bit 14 (unused)
-        1'b0,      // Bit 13 (unused)
-        1'b0,      // Bit 12 (unused)
-        1'b0,      // Bit 11 (unused)
-        1'b0,      // Bit 10 (unused)
-        1'b0,      // Bit 9 (unused)
-        1'b0,      // Bit 8 (unused)
-        R7out,     // Bit 7 (R7out)
-        R6out,     // Bit 6 (R6out)
-        R5out,     // Bit 5 (R5out)
-        R4out,     // Bit 4 (R4out)
-        R3out,     // Bit 3 (R3out)
-        R2out,     // Bit 2 (R2out)
-        R1out,     // Bit 1 (R1out)
-        1'b0       // Bit 0 (R0out, unused)
+        MDRout,    // Bit 21 
+        PCout,     // Bit 20
+        Zloout,    // Bit 19
+        Zhiout,    // Bit 18
+        LOout,     // Bit 17 
+        HIout,     // Bit 16 
+        R15out,    // Bit 15 
+        R14out,    // Bit 14
+        R13out,    // Bit 13 
+        R12out,    // Bit 12 
+        R11out,    // Bit 11
+        R10out,    // Bit 10 
+        R9out,     // Bit 9
+        R8out,     // Bit 8
+        R7out,     // Bit 7
+        R6out,     // Bit 6
+        R5out,     // Bit 5
+        R4out,     // Bit 4
+        R3out,     // Bit 3 
+        R2out,     // Bit 2
+        R1out,     // Bit 1
+        R0out      // Bit 0 
     }),
     .select(BusMuxControl)  // Select signal from Control Unit (5-bit)
 );
 
 mux32to1 busMux(
-    .R0(32'b0), .R1(R1), .R2(R2), .R3(R3), 
+    .R0(R0), .R1(R1), .R2(R2), .R3(R3), 
     .R4(R4), .R5(R5), .R6(R6), .R7(R7), 
-    .R8(32'b0), .R9(32'b0), .R10(32'b0), .R11(32'b0), 
-    .R12(32'b0), .R13(32'b0), .R14(32'b0), .R15(32'b0), 
+    .R8(R8), .R9(R9), .R10(R9), .R11(R11), 
+    .R12(R12), .R13(13), .R14(R14), .R15(R15), 
     .RHI(HI), .RLO(LO), .RZHI(Z[63:32]), .RZLO(Z[31:0]), 
     .RPC(PC), .RMDR(MDR), .RINPORT(32'b0), .RC(32'b0), 
     .Sel(BusMuxControl),  // Control signal to select the right input
