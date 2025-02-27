@@ -1,0 +1,10 @@
+output [31:0] Outport_output,
+input [31:0] Inport_input,
+
+
+wire [31:0] MDMUXtoMDR, MARtoMEMORY, IRtoCONTROL, outport_output;
+
+register INPORT(Inport_input, clk, clr, INPORTin, INPORTtoBUSMUX);
+register OUTPORT(BUSMUXOUT, clk, clr, OUTPORTin, outport_output);
+encoder BusEncoder(CODEtoBUSMUX, {8'b0, Cout, INPORTout, MDRout, PCout, Zlowout, Zhighout, 
+								LOout, HIout, Rout});
