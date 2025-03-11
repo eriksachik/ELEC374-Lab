@@ -19,12 +19,11 @@ module register0 #(parameter DATA_WIDTH = 32, INIT = 32'h0)(
             q <= BusMuxOut; 
         end
     end
-
-    always @* begin
-      
-        for (integer i = 0; i < DATA_WIDTH; i = i + 1) begin
+	always @(*) begin
+		 integer i;  // Declare loop variable
+        for (i = 0; i < DATA_WIDTH; i = i + 1) begin
             BusMuxIn[i] = q[i] & ~BAout; 
         end
-    end
+	end
 
 endmodule

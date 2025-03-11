@@ -9,7 +9,7 @@ module CON_FF (
     // Always block to evaluate the condition based on IR[22:19] and R[Ra]
     always @(*) begin
         if (CONin) begin
-            case (IR[22:19]) // Check the C2 field (4 bits)
+            case (IR) // Check the C2 field (4 bits)
                 4'b0000: CON = (R == 32'b0);   // brzr: branch if zero
                 4'b0001: CON = (R != 32'b0);   // brnz: branch if non-zero
                 4'b0010: CON = (R[31] == 1'b0); // brpl: branch if positive (R > 0)
