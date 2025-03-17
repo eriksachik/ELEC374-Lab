@@ -47,30 +47,20 @@ module new_datapath_tb;
 	// case statement for each possible state the datapath could be in
 	always@(posedge Clock)
 		begin
-			case(Present_State)
-				Default : Present_State = T0;
-			
-//				Default : Present_State = Reg_load1a;
-//				Reg_load1a : Present_State = Reg_load1b;
-//				Reg_load1b : Present_State = Reg_load2a;
-//				Reg_load2a : Present_State = Reg_load2b;
-////				Reg_load2b : Present_State = Reg_load3a;
-//				
-//				Reg_load2b : Present_State = T0;     // comment out for operations without hi and lo outputs
-//
-////				Reg_load3a : Present_State = Reg_load3b;
-//				Reg_load3b : Present_State = T0;
-				T0			  : Present_State = T1;
-				T1			  : Present_State = T2;
-				T2			  : Present_State = T3;
-				T3			  : Present_State = T4;
-				T4			  : Present_State = T5;
-				T5			  : Present_State = T6;      // comment out for operations without hi and lo outputs
-//				T6			  : Present_State = T7;
-//				T7			  : Present_State = T8;
-				default    : Present_State = Default;
-				
-			endcase
+			always@(posedge Clock) begin
+    case(Present_State)
+        Default     : Present_State = Load_Reg2a;
+        Load_Reg2a  : Present_State = Load_Reg2b;
+        Load_Reg2b  : Present_State = T0;
+        T0          : Present_State = T1;
+        T1          : Present_State = T2;
+        T2          : Present_State = T3;
+        T3          : Present_State = T4;
+        T4          : Present_State = T5;
+        default     : Present_State = Default;
+    endcase
+end
+
 	end
 	
 	always @(Present_State) begin
@@ -121,18 +111,27 @@ module new_datapath_tb;
 //				
 //        end
 //
-//        // Load Register 2
-//        Reg_load2a: begin
-//            // Example: Mdatain = <value>;
-//            // Assert Read = 1, MDRin = 1
-//				
-//				Mdatain<=32'h0000000F;
-//				
-//				Read = 0; MDRin = 0;
-//				Read <= 1; MDRin <= 1;
-//				#15 Read <= 0; MDRin <= 0;
-//				
-//        end
+        // Load Register 2
+Load_Reg2a: begin
+    // Load value from memory address 2 into MDR
+    MARin <= 1;
+    // Simulate PC = 2 or just force MAR = 2 if direct access is allowed in datapath
+    // If MAR gets BusMux value, then set BusMux/MAR appropriately here
+    // For now, assume MAR can take an address = 2 directly
+    // Mdatain <= 32'h00000002; // if necessary depending on datapath
+    #15 MARin <= 0;
+
+    Read <= 1; MDRin <= 1;
+    // Mdatain <= 32'hDEADBEEF; // value at address 2 in memory
+    #15 Read <= 0; MDRin <= 0;
+end
+
+Load_Reg2b: begin
+    // MDRout -> Reg2in
+    MDRout <= 1; Grb <= 1; Rin <= 1; // Assuming Grb is set to select R2
+    #15 MDRout <= 0; Grb <= 0; Rin <= 0;
+end
+
 //        Reg_load2b: begin
 //            // Example: MDRout = 1, R2in = 1;
 //				
