@@ -1,11 +1,8 @@
 `timescale 1ns/10ps
 module new_datapath(
 
-	input wire R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out, Cout, // ADD TO TESTBENCH
-	input wire R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in,
 	input wire HIin, HIout, LOin, LOout, PCin, PCout, IRin, Zin, Zhiout, Zloout, Yin, MARin, MDRin, MDRout, Read, Clock, GlobalReset, write, //ADDED WRITE
-	input wire Gra, Grb, Grc, Rout, Rin, BAout, s_d_en, CONin, CONout, OUT_portin, Strobe, IN_portout,// ADD TO TESTBENCH
-	input wire [31:0] Mdatain,
+	input wire Gra, Grb, Grc, Rout, Rin, BAout, s_d_en, CONin, CONout, OUT_portin, Strobe, IN_portout, Cout,// ADD TO TESTBENCH
 	input wire [4:0] ALUControl,
 	
 	output wire Zero,
@@ -20,7 +17,11 @@ wire [31:0] MDR;
 wire [8:0] marAddress;
 wire [4:0] BusMuxControl;
 wire [63:0] ALU_Output;
+wire [31:0] Mdatain;
 
+// register select signals
+wire R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out; // ADD TO TESTBENCH
+wire R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in;
 
 // RAM declaration
 
@@ -275,7 +276,7 @@ mux32to1 busMux(
     .R0(R0), .R1(R1), .R2(R2), .R3(R3), 
     .R4(R4), .R5(R5), .R6(R6), .R7(R7), 
     .R8(R8), .R9(R9), .R10(R9), .R11(R11), 
-    .R12(R12), .R13(13), .R14(R14), .R15(R15), 
+    .R12(R12), .R13(R13), .R14(R14), .R15(R15), 
     .RHI(HI), .RLO(LO), .RZHI(Z[63:32]), .RZLO(Z[31:0]), 
     .RPC(PC), .RMDR(MDR), .RINPORT(INdata), .RC(Cex), 
     .Sel(BusMuxControl),  // Control signal to select the right input

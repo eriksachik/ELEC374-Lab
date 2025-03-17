@@ -1,11 +1,11 @@
 `timescale 1ns/10ps
 module new_datapath_tb;
 
-	reg R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out, Cout; 
-	reg R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in;
+//	reg R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out, Cout; 
+//	reg R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in;
 	reg HIin, HIout, LOin, LOout, PCin, PCout, IRin, Zin, Zhiout, Zloout, Yin, MARin, MDRin, MDRout, Read, Clock, GlobalReset, write;
-	reg Gra, Grb, Grc, Rout, Rin, BAout, s_d_en, CONin, CONout, OUT_portin, Strobe, IN_portout;
-	reg [31:0] Mdatain;
+	reg Gra, Grb, Grc, Rout, Rin, BAout, s_d_en, CONin, CONout, OUT_portin, Strobe, IN_portout, Cout;
+//	reg [31:0] Mdatain;
 	reg [4:0] ALUControl;
 	
 	// using R1, R2 as conventional inputs
@@ -19,21 +19,23 @@ module new_datapath_tb;
 	//defines all possible states that the datapath can be in
 	parameter  Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,  
                              Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111,  
-                             T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b1101; 
+                             T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b1101, T7 = 4'b1110, T8 = 4'b1111; 
    reg  [3:0] Present_State = Default; 
 	
-	new_datapath DUT(.R0out(R0out), .R1out(R1out), .R2out(R2out), .R3out(R3out), .R4out(R4out),.R5out(R5out),.R6out(R6out),.R7out(R7out), 
-						  .R8out(R8out), .R9out(R9out), .R10out(R10out), .R11out(R11out), .R12out(R12out),.R13out(R13out),.R14out(R14out),.R15out(R15out), 
-						  .R0in(R0in), .R1in(R1in), .R2in(R2in), .R3in(R3in),.R4in(R4in),.R5in(R5in),.R6in(R6in),.R7in(R7in),
-						  .R8in(R8in), .R9in(R9in), .R10in(R10in), .R11in(R11in),.R12in(R12in),.R13in(R13in),.R14in(R14in),.R15in(R15in),
+	new_datapath DUT(
+//						  .R0out(R0out), .R1out(R1out), .R2out(R2out), .R3out(R3out), .R4out(R4out),.R5out(R5out),.R6out(R6out),.R7out(R7out), 
+//						  .R8out(R8out), .R9out(R9out), .R10out(R10out), .R11out(R11out), .R12out(R12out),.R13out(R13out),.R14out(R14out),.R15out(R15out), 
+//						  .R0in(R0in), .R1in(R1in), .R2in(R2in), .R3in(R3in),.R4in(R4in),.R5in(R5in),.R6in(R6in),.R7in(R7in),
+//						  .R8in(R8in), .R9in(R9in), .R10in(R10in), .R11in(R11in),.R12in(R12in),.R13in(R13in),.R14in(R14in),.R15in(R15in),
 						  .HIin(HIin), .HIout(HIout), .LOin(LOin), .LOout(LOout), .PCin(PCin), .PCout(PCout), 
 						  .IRin(IRin), .Zin(Zin), .Zhiout(Zhiout), .Zloout(Zloout), .Yin(Yin), .MARin(MARin), 
 						  .MDRin(MDRin), .MDRout(MDRout), .Read(Read), .Clock(Clock), .GlobalReset(GlobalReset),
-						  .Mdatain(Mdatain), .ALUControl(ALUControl), 
+//						  .Mdatain(Mdatain), 
+						  .ALUControl(ALUControl),
 						  .Zero(Zero), .R0(R0), .R1(R1), .R2(R2), .R3(R3), .HI(HI), .LO(LO), .IR(IR), .PC(PC), .BusMuxOut(BusMuxOut),.Z(Z), .Y(Y),
 						  .R4(R4), .R5(R5), .R6(R6), .R7(R7), .R8(R8), .R9(R9), .R10(R10), .R11(R11), .R12(R12), .R13(R13), .R14(R14), .R15(R15),
 						  .Cout(Cout), .write(write), .Gra(Gra), .Grb(Grb), .Grc(Grc), .Rout(Rout), .Rin(Rin), .BAout(BAout), .s_d_en(s_d_en), 
-						  .CONin(CONin), .CONout(CONout), .OUT_portin(OUT_portin), Strobe.(Strobe), .IN_portout(IN_portout));
+						  .CONin(CONin), .CONout(CONout), .OUT_portin(OUT_portin), .Strobe(Strobe), .IN_portout(IN_portout));
 
 	// instantiates clock signal
 	initial
@@ -46,23 +48,26 @@ module new_datapath_tb;
 	always@(posedge Clock)
 		begin
 			case(Present_State)
+				Default : Present_State = T0;
 			
-				Default : Present_State = Reg_load1a;
-				Reg_load1a : Present_State = Reg_load1b;
-				Reg_load1b : Present_State = Reg_load2a;
-				Reg_load2a : Present_State = Reg_load2b;
-//				Reg_load2b : Present_State = Reg_load3a;
-				
-				Reg_load2b : Present_State = T0;     // comment out for operations without hi and lo outputs
-
-//				Reg_load3a : Present_State = Reg_load3b;
+//				Default : Present_State = Reg_load1a;
+//				Reg_load1a : Present_State = Reg_load1b;
+//				Reg_load1b : Present_State = Reg_load2a;
+//				Reg_load2a : Present_State = Reg_load2b;
+////				Reg_load2b : Present_State = Reg_load3a;
+//				
+//				Reg_load2b : Present_State = T0;     // comment out for operations without hi and lo outputs
+//
+////				Reg_load3a : Present_State = Reg_load3b;
 //				Reg_load3b : Present_State = T0;
 				T0			  : Present_State = T1;
 				T1			  : Present_State = T2;
 				T2			  : Present_State = T3;
 				T3			  : Present_State = T4;
-//				T4			  : Present_State = T5;
-//				T5			  : Present_State = T6;      // comment out for operations without hi and lo outputs
+				T4			  : Present_State = T5;
+				T5			  : Present_State = T6;      // comment out for operations without hi and lo outputs
+				T6			  : Present_State = T7;
+				T7			  : Present_State = T8;
 				default    : Present_State = Default;
 				
 			endcase
@@ -76,61 +81,66 @@ module new_datapath_tb;
             // Deassert all control signals
             // Example: R1in = 0; R1out = 0; Zin = 0;
             // Load initial values if needed
-				R0out<=0; R0in<=0; R1out<=0; R1in<=0; R2out<=0; R2in<=0; R3out<=0; R3in<=0; HIin<=0; HIout<=0; LOin<=0; LOout<=0; PCin<=0; PCout<=0; 
+//				R0out<=0; R0in<=0; R1out<=0; R1in<=0; R2out<=0; R2in<=0; R3out<=0; R3in<=0; 
+				HIin<=0; HIout<=0; LOin<=0; LOout<=0; PCin<=0; PCout<=0; 
 				IRin<=0; Zin<=0; Zhiout<=0; Zloout<=0; Yin<=0; MARin<=0; MDRin<=0; MDRout<=0; Read<=0; Clock<=0; GlobalReset<=0;
+				Cout<=0; IN_portout<=0;
+				Gra<=0; Grb<=0; Grc<=0; Rout<=0; BAout<=0; Rin<=0;
+				s_d_en<=1; CONin<=0; CONout<=0; OUT_portin<=0; Strobe<=0;
+				write<=0;
 				
-				R4out<=0; R4in<=0; R5out<=0; R5in<=0;
-				R6out<=0; R6in<=0; R7out<=0; R7in<=0;
-				R8out<=0; R8in<=0; R9out<=0; R9in<=0;
-				R10out<=0; R10in<=0; R11out<=0; R11in<=0;
-				R12out<=0; R12in<=0; R13out<=0; R13in<=0;
-				R14out<=0; R14in<=0; R15out<=0; R15in<=0;
-				
-				Mdatain <= 32'h00000000; 
+//				R4out<=0; R4in<=0; R5out<=0; R5in<=0;
+//				R6out<=0; R6in<=0; R7out<=0; R7in<=0;
+//				R8out<=0; R8in<=0; R9out<=0; R9in<=0;
+//				R10out<=0; R10in<=0; R11out<=0; R11in<=0;
+//				R12out<=0; R12in<=0; R13out<=0; R13in<=0;
+//				R14out<=0; R14in<=0; R15out<=0; R15in<=0;
+//				
+//				Mdatain <= 32'h00000000; 
 
         end
-
-        // Load Register 1
-        Reg_load1a: begin
-		  
-            // Example: Mdatain = <value>;
-				Mdatain<=32'h00000000;
-            // Assert Read = 1, MDRin = 1
-				Read = 0; MDRin = 0;
-				Read <= 1; MDRin <= 1;
-				#15 Read <= 0; MDRin <= 0;
-				
-        end
-		  
-        Reg_load1b: begin
-            // Example: MDRout = 1, R1in = 1;
-				
-				MDRout <= 1; R5in <= 1;  
-				
-				#15 MDRout <= 0; R5in <= 0;
-				
-        end
-
-        // Load Register 2
-        Reg_load2a: begin
-            // Example: Mdatain = <value>;
-            // Assert Read = 1, MDRin = 1
-				
-				Mdatain<=32'h0000000F;
-				
-				Read = 0; MDRin = 0;
-				Read <= 1; MDRin <= 1;
-				#15 Read <= 0; MDRin <= 0;
-				
-        end
-        Reg_load2b: begin
-            // Example: MDRout = 1, R2in = 1;
-				
-				MDRout <= 1; R0in <= 1;  
-				
-				#15 MDRout <= 0; R0in <= 0;
-				
-        end
+//
+//        // Load Register 1
+//        Reg_load1a: begin
+//		  
+//            // Example: Mdatain = <value>;
+//				Mdatain<=32'h00000000;
+//            // Assert Read = 1, MDRin = 1
+//				Read = 0; MDRin = 0;
+//				Read <= 1; MDRin <= 1;
+//				#15 Read <= 0; MDRin <= 0;
+//				
+//        end
+//		  
+//        Reg_load1b: begin
+//            // Example: MDRout = 1, R1in = 1;
+//				
+//				MDRout <= 1; R5in <= 1;  
+//				
+//				#15 MDRout <= 0; R5in <= 0;
+//				
+//        end
+//
+//        // Load Register 2
+//        Reg_load2a: begin
+//            // Example: Mdatain = <value>;
+//            // Assert Read = 1, MDRin = 1
+//				
+//				Mdatain<=32'h0000000F;
+//				
+//				Read = 0; MDRin = 0;
+//				Read <= 1; MDRin <= 1;
+//				#15 Read <= 0; MDRin <= 0;
+//				
+//        end
+//        Reg_load2b: begin
+//            // Example: MDRout = 1, R2in = 1;
+//				
+//				MDRout <= 1; R0in <= 1;  
+//				
+//				#15 MDRout <= 0; R0in <= 0;
+//				
+//        end
 
 //        // Load Register 3
 //        Reg_load3a: begin
@@ -162,7 +172,8 @@ module new_datapath_tb;
             // Example: Zlowout = 1, PCin = 1, Read = 1, MDRin = 1;
 				
 				Read <= 1; MDRin <= 1;   
-				Mdatain <= 32'h92800000; // placeholder Instruction/opcode
+//				Mdatain <= 32'h92800000; // placeholder Instruction/opcode
+				#15 Read<=0; MDRin<=0;
 				
         end
         T2: begin
@@ -172,24 +183,34 @@ module new_datapath_tb;
         end
         T3: begin
             // Example: R1out = 1, Yin = 1;
-				R0out <= 1; ALUControl <= 5'b10010; Zin <= 1; // ALUControl signal palceholder
-				#15 R0out<=0; Zin<=0;
+				Grb <= 1; BAout <= 1; Yin <= 1; // ALUControl signal palceholder
+				#15 Grb <= 0; BAout <= 0; Yin <= 0;
         end
         T4: begin
             // Example: R2out = 1, ALUControl = <some_op>, Zin = 1;
-				Zloout <= 1; R5in <= 1;   
-				#15 Zloout<=0; R5in <= 0;
+				Cout <= 1; ALUControl <= 5'b00011; Zin<=1;  
+				#15 Cout<=0; Zin <= 0;
         end
-//        T5: begin
-//            // Example: Zlowout = 1, R3in = 1;
-//				Zloout <= 1; R5in <= 1;   
-//				#15 Zloout<=0; R5in <= 0;
-//        end
-//		  
-//		  T6: begin                      // comment out for operations without hi and lo outputs
-//				Zhiout <= 1; HIin <= 1;   
-//				#15 Zhiout<=0; HIin <= 0;
-//        end
+        T5: begin
+            // Example: Zlowout = 1, R3in = 1;
+				Zloout <= 1; MARin <= 1;   
+				#15 Zloout<=0; MARin <= 0;
+        end
+		  
+		  T6: begin                      // comment out for operations without hi and lo outputs
+				Read <= 1; MDRin <= 1; 
+//				Mdatain <= 32'hFFFF0000;   
+				
+        end
+		  
+		  T7: begin                      // comment out for operations without hi and lo outputs
+				#15 Read<=0; MDRin <= 0;
+        end
+		  
+		  T8: begin                      // comment out for operations without hi and lo outputs
+				MDRout <= 1; Gra <= 1; Rin <= 1;   
+				#15 MDRout <= 0; Gra <= 0; Rin <= 0; 
+        end
 
         // Default case to handle any unexpected states
         default: begin
