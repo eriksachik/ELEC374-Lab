@@ -66,8 +66,8 @@ module new_datapath_tb;
 				T3			  : Present_State = T4;
 				T4			  : Present_State = T5;
 				T5			  : Present_State = T6;      // comment out for operations without hi and lo outputs
-				T6			  : Present_State = T7;
-				T7			  : Present_State = T8;
+//				T6			  : Present_State = T7;
+//				T7			  : Present_State = T8;
 				default    : Present_State = Default;
 				
 			endcase
@@ -189,10 +189,10 @@ module new_datapath_tb;
 
 		  T4: begin
 				// ALU operation: Y + immediate (IR[15:0] sign-extended)
-				Cout <= 0; // You don't need external Cout
+				Cout <= 1; // You don't need external Cout
 				ALUControl <= 5'b00011; // Assuming this is ADD
 				Zin <= 1;
-				#15 Zin <= 0;
+				#15 Zin <= 0; Cout<=0;
 		  end
 
 			T5: begin
