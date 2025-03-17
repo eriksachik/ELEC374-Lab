@@ -13,7 +13,7 @@ module ldi_tb;
     wire [63:0] Z;
 
     // State Definitions
-    parameter  Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, T0 = 4'b0011, T1 = 4'b0100, T2 = 4'b0101, T3 = 4'b0110, T4 = 4'b0111, T5 = 4'b1000;
+    parameter  Default = 4'b0000, T0 = 4'b0001, T1 = 4'b0010, T2 = 4'b0011, T3 = 4'b0100, T4 = 4'b0101, T5 = 4'b0110;
     reg  [3:0] Present_State = Default;
 
     // Instantiate the datapath
@@ -61,7 +61,7 @@ module ldi_tb;
                 CONin <= 0; CONout <= 0; OUT_portin <= 0; Strobe <= 0; IN_portout <= 0;
             end
 
-            // Instruction fetch and decode cycle (LDI-specific)
+            // Instruction fetch cycle (LDI-specific)
             T0: begin
                 // Fetch instruction: Set up MAR, Read memory, fetch instruction into MDR
                 PCout <= 1; MARin <= 1; PCin <= 1; // Transfer PC to MAR, increment PC
@@ -81,22 +81,21 @@ module ldi_tb;
             end
 
             T3: begin
-                // Set ALU operation to prepare immediate value; Z register is set to immediate value
-                // Set control signals: ALUControl for the immediate value operation
-                ALUControl <= 5'b00011; Zin <= 1;
-                #15 Zin <= 0;
+                // Load immediate value to Y register (similar to Grb, BAout, Yin in LD)
+                Grb <= 1; BAout <= 1; Yin <= 1;
+                #15 Grb <= 0; BAout <= 0; Yin <= 0;
             end
 
             T4: begin
-                // Write immediate value to target register
-                Zloout <= 1; Gra <= 1; Rin <= 1;
-                #15 Zloout <= 0; Gra <= 0; Rin <= 0;
+                // Perform ADD to store the immediate value in Z
+                Cout <= 1; ALUControl <= 5'b00011; Zin <= 1;
+                #15 Cout <= 0; Zin <= 0;
             end
 
             T5: begin
-                // Finish the operation, deassert control signals
-                write <= 1;
-                #15 write <= 0;
+                // Write the immediate value from Z into the destination register
+                Zloout <= 1; Gra <= 1; Rin <= 1;
+                #15 Zloout <= 0; Gra <= 0; Rin <= 0;
             end
 
             default: begin
