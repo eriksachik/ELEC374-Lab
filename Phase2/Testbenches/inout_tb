@@ -1,0 +1,105 @@
+`timescale 1ns/10ps
+module new_datapath_tb;
+
+	reg HIin, HIout, LOin, LOout, PCin, PCout, IRin, Zin, Zhiout, Zloout, Yin, MARin, MDRin, MDRout, Read, Clock, GlobalReset, write;
+	reg Gra, Grb, Grc, Rout, Rin, BAout, s_d_en, CONin, CONout, OUT_portin, Strobe, IN_portout, Cout;
+	reg [4:0] ALUControl;
+
+	wire Zero;
+	wire [31:0] R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15;
+	wire [31:0] HI, LO, IR, PC, BusMuxOut, Y;
+	wire [63:0] Z;
+	
+	reg [3:0] step_select; // 0 = OUT instruction, 1 = IN instruction
+
+	initial begin
+		step_select = 0; // Start with OUT
+	end
+
+	initial begin
+		Clock = 0;
+		forever #10 Clock = ~Clock;
+	end
+
+	parameter  Default = 4'b0000, Preload = 4'b0001, T0 = 4'b0010, T1 = 4'b0011, T2 = 4'b0100, T3 = 4'b0101, Done = 4'b0110;
+	reg [3:0] Present_State = Default;
+
+	new_datapath DUT(
+		  .HIin(HIin), .HIout(HIout), .LOin(LOin), .LOout(LOout), .PCin(PCin), .PCout(PCout), 
+		  .IRin(IRin), .Zin(Zin), .Zhiout(Zhiout), .Zloout(Zloout), .Yin(Yin), .MARin(MARin), 
+		  .MDRin(MDRin), .MDRout(MDRout), .Read(Read), .Clock(Clock), .GlobalReset(GlobalReset),
+		  .ALUControl(ALUControl),
+		  .Zero(Zero), .R0(R0), .R1(R1), .R2(R2), .R3(R3), .R4(R4), .R5(R5), .R6(R6), .R7(R7), .R8(R8), .R9(R9), .R10(R10), .R11(R11), .R12(R12), .R13(R13), .R14(R14), .R15(R15),
+		  .Cout(Cout), .write(write), .Gra(Gra), .Grb(Grb), .Grc(Grc), .Rout(Rout), .Rin(Rin), .BAout(BAout), .s_d_en(s_d_en), 
+		  .CONin(CONin), .CONout(CONout), .OUT_portin(OUT_portin), .Strobe(Strobe), .IN_portout(IN_portout)
+	);
+
+	// State machine
+	always @(posedge Clock) begin
+		case (Present_State)
+			Default: Present_State = Preload;
+			Preload: Present_State = T0;
+			T0: Present_State = T1;
+			T1: Present_State = T2;
+			T2: Present_State = T3;
+			T3: Present_State = Done;
+			Done: begin 
+				if (step_select == 0) begin
+					step_select = 1; // Move to IN instruction
+					Present_State = Preload;
+				end else begin
+					Present_State = Done;
+				end
+			end
+			default: Present_State = Default;
+		endcase
+	end
+
+	// Control signals
+	always @(Present_State) begin
+		case (Present_State)
+			Default: begin
+				HIin <= 0; HIout <= 0; LOin <= 0; LOout <= 0; 
+				PCin <= 0; PCout <= 0; IRin <= 0; Zin <= 0; Zhiout <= 0; Zloout <= 0; Yin <= 0;
+				MARin <= 0; MDRin <= 0; MDRout <= 0; Read <= 0; GlobalReset <= 0; Clock <= 0;
+				Gra <= 0; Grb <= 0; Grc <= 0; Rout <= 0; BAout <= 0; Rin <= 0;
+				write <= 0; Cout <= 0; IN_portout <= 0; s_d_en <= 1; CONin <= 0; CONout <= 0; OUT_portin <= 0; Strobe <= 0;
+			end
+
+			// Preload either R6 or the IN_PORT depending on the step
+			Preload: begin
+				if (step_select == 0) begin
+					// Preload R6 with 0x1111_2222
+					force R6 = 32'h1111_2222;
+				end else begin
+					// Preload IN_PORT with 0xDEAD_BEEF
+					force DUT.IN_portout = 1; // Simulated input pulse
+					force DUT.BusMuxOut = 32'hDEAD_BEEF;
+				end
+			end
+
+			// Instruction Fetch stages (no change from T0 - T2)
+			T0: begin PCout <= 1; MARin <= 1; #15 PCout <= 0; MARin <= 0; end
+			T1: begin Read <= 1; MDRin <= 1; #15 Read <= 0; MDRin <= 0; end
+			T2: begin MDRout <= 1; IRin <= 1; #15 MDRout <= 0; IRin <= 0; end
+
+			// OUT and IN control sequences
+			T3: begin
+				if (step_select == 0) begin
+					// OUT R6
+					Gra <= 0; Grb <= 0; Grc <= 1; Rout <= 1; OUT_portin <= 1; // Assuming Grc selects R6
+					#15 Grc <= 0; Rout <= 0; OUT_portin <= 0;
+				end else begin
+					// IN R3
+					IN_portout <= 1; Gra <= 0; Grb <= 0; Grc <= 1; Rin <= 1; // Assuming Grc selects R3
+					#15 IN_portout <= 0; Grc <= 0; Rin <= 0;
+				end
+			end
+
+			Done: begin end
+
+			default: begin end
+		endcase
+	end
+
+endmodule
