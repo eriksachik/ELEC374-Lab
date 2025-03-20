@@ -1,13 +1,14 @@
 `timescale 1ns/10ps
 module new_datapath(
 
-	input wire HIin, HIout, LOin, LOout, PCin, PCout, IRin, Zin, Zhiout, Zloout, Yin, MARin, MDRin, MDRout, Read, Clock, GlobalReset, write, //ADDED WRITE
-	input wire Gra, Grb, Grc, Rout, Rin, BAout, s_d_en, CONin, CONout, OUT_portin, Strobe, IN_portout, Cout,// ADD TO TESTBENCH
+	input wire HIin, HIout, LOin, LOout, PCinc, PCout, IRin, Zin, Zhiout, Zloout, Yin, MARin, MDRin, MDRout, Read, Clock, GlobalReset, write, //ADDED WRITE
+	input wire Gra, Grb, Grc, Rout, Rin, BAout, s_d_en, CONin, OUT_portin, Strobe, IN_portout, Cout, PCin,// ADD TO TESTBENCH
 	input wire [4:0] ALUControl,
 	
 	output wire Zero,
+	output wire CONout, 
 	output wire [31:0] R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, Cex, OUT,
-	output wire [31:0] IN, INdata, HI, LO, IR, PC, BusMuxOut, Y,
+	output wire [31:0] IN, INdata, HI, LO, IR, PC, BusMuxOut, Y, PCinput,
 	output wire [63:0] Z
 
 );
@@ -50,15 +51,26 @@ select_decode_logic s_d (
 
 // CONFF
 
+wire CON_FF_Out;  // Temporary wire to hold the output from CON_FF
+
 CON_FF con_ff(
     .IR(IR[22:19]),
     .R(BusMuxOut), 
     .CONin(CONin), 
-    .CON(CONout)
+    .CON(CON_FF_Out) // Store the result in a wire first
 );
 
+registerCON_FF CONout_reg(
+    .clear(GlobalReset),
+    .clock(Clock),
+    .enable(CONin),         // Enable writing when CONin is high
+    .CON_FFin(CON_FF_Out), // Input from CON_FF
+    .CON_FFout(CONout)       // Stored value
+);
+
+
 // module declarations
-registerPC PC_reg(.clear(GlobalReset), .clock(Clock), .increment(PCin), .PCOut(PC)); // Program Counter
+registerPC PC_reg(.clear(GlobalReset), .clock(Clock), .increment(PCinc), .PCOut(PC), .PCinput(BusMuxOut), .in(PCin)); // Program Counter
 
 ALU ArithLogUnit(.A(Y), .B(BusMuxOut), .ALUControl(ALUControl), .ALUOut(ALU_Output), .Zero(Zero));
 
