@@ -67,8 +67,8 @@ module new_datapath_tb;
             // Instruction fetch cycle (JAL-specific)
             T0: begin
                 // Fetch instruction: Set up MAR, Read memory, fetch instruction into MDR
-                PCout <= 1; MARin <= 1; PCin <= 1; 
-                #15 PCout <= 0; MARin <= 0; PCin <= 0;
+                PCout <= 1; MARin <= 1; PCinc <= 1; 
+                #15 PCout <= 0; MARin <= 0; PCinc <= 0;
             end
             T1: begin
                 // Fetch the instruction (load it to MDR)
@@ -84,9 +84,9 @@ module new_datapath_tb;
             // JAL Specific Steps
             T3: begin
                 // Store the return address (PC+4) into R31 (for jal, we use $ra register which is R31)
-                Gra <= 1; Rout <= 1; // Store return address (PC+4) into R31
+                Gra <= 1; Rin <= 1; // Store return address (PC+4) into R31
                 PCinc <= 1; PCout <= 1;
-                #15 Gra <= 0; Rout <= 0; PCinc <= 0; PCout <= 0;
+                #15 Gra <= 0; Rin <= 0; PCinc <= 0; PCout <= 0;
             end
             T4: begin
                 // Set PC to the target address from the instruction
