@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module st_tb;
+module new_datapath_tb;
 
     // Control Signals
     reg HIin, HIout, LOin, LOout, PCinc, PCout, IRin, Zin, Zhiout, Zloout, Yin, MARin, MDRin, MDRout, Read, Clock, GlobalReset, write;
@@ -61,6 +61,7 @@ module st_tb;
                 Gra <= 0; Grb <= 0; Grc <= 0; Rout <= 0; BAout <= 0; Rin <= 0;
                 s_d_en <= 1; CONin <= 0; OUT_portin <= 0; Strobe <= 0;
                 write <= 0; PCin <= 0; 
+					 force R3 = 32'h0000_00B6;
             end
 
             // Instruction fetch cycle (st-specific)
@@ -81,8 +82,8 @@ module st_tb;
 
             // Calculate effective address (if indexed addressing)
             T3: begin
-                Grb <= 1; BAout <= 1; Yin <= 1; // Load base register (if applicable)
-                #15 Grb <= 0; BAout <= 0; Yin <= 0;
+                Gra <= 1; BAout <= 1; Yin <= 1; // Load base register (if applicable)
+                #15 Gra <= 0; BAout <= 0; Yin <= 0;
             end
 
             T4: begin
