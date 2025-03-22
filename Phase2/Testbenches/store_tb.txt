@@ -106,7 +106,7 @@ module new_datapath_tb;
             // Write data to memory
             T7: begin
                 write <= 1;
-                #15 write <= 0;
+                #35 write <= 0;
             end
 
             default: begin
