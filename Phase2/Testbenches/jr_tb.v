@@ -71,7 +71,7 @@ module new_datapath_tb;
 				T1			  : Present_State = T2;
 				T2			  : Present_State = T3;
 				T3			  : Present_State = T4;
-				T4			  : Present_State = T5;
+				T4			  : Present_State = T0;
 				T5			  : Present_State = T6;      // comment out for operations without hi and lo outputs
 				T6			  : Present_State = T7;
 				T7			  : Present_State = T8;
@@ -96,6 +96,8 @@ always @(Present_State) begin
 				s_d_en<=1; CONin<=0; OUT_portin<=0; Strobe<=0;
 				write<=0; PCin<=0; 
 				
+				force R8 = 32'h0000000F;
+				
 //				R4out<=0; R4in<=0; R5out<=0; R5in<=0;
 //				R6out<=0; R6in<=0; R7out<=0; R7in<=0;
 //				R8out<=0; R8in<=0; R9out<=0; R9in<=0;
@@ -109,42 +111,54 @@ always @(Present_State) begin
 
         // Instruction execution steps
         T0: begin
-            if (second) begin
-                PCout <= 1; MARin <= 1; PCin <= 1;
-                #15 PCout <= 0; MARin <= 0; PCin <= 0;
-            end else begin
-					 PCout <= 1; MARin <= 1; PCin <= 1;
-					 #15 PCout <= 0; PCin <= 0;
-				end
+//            if (second) begin
+//                PCout <= 1; MARin <= 1; PCinc <= 1;
+//                #15 PCout <= 0; MARin <= 0; PCinc <= 0;
+//            end else begin
+//					 PCout <= 1; MARin <= 1; PCinc <= 1;
+//					 #15 PCout <= 0; PCinc <= 0;
+//				end
+//				
+				PCout <= 1; MARin <= 1; PCinc <= 1;
+				 #15 PCout <= 0; MARin <= 0; PCinc <= 0;
 					 
         end
         T1: begin
-            if (second) begin
-                Read <= 1; MDRin <= 1;   
-                #15 Read <= 0; MDRin <= 0;
-            end else begin
-					 #15 MARin <= 0;
-				end
+//            if (second) begin
+//                Read <= 1; MDRin <= 1;   
+//                #15 Read <= 0; MDRin <= 0;
+//            end else begin
+//					 #15 MARin <= 0;
+//				end
+				
+				Read <= 1; MDRin <= 1;   
+				 #15 Read <= 0; MDRin <= 0;
         end
         T2: begin
-            if (second) begin
-                MDRout <= 1; IRin <= 1; 
-                #15 MDRout <= 0; IRin <= 0; 
-            end else begin
-					 Read <= 1; MDRin <= 1;   
-				//    Mdatain <= 32'b001100_00010_00001_0000000000001010; // ANDI example opcode
-					 #15 Read <= 0; MDRin <= 0;
-				end
+//            if (second) begin
+//                MDRout <= 1; IRin <= 1; 
+//                #15 MDRout <= 0; IRin <= 0; 
+//            end else begin
+//					 Read <= 1; MDRin <= 1;   
+//				//    Mdatain <= 32'b001100_00010_00001_0000000000001010; // ANDI example opcode
+//					 #15 Read <= 0; MDRin <= 0;
+//				end
+				
+				MDRout <= 1; IRin <= 1; 
+				 #15 MDRout <= 0; IRin <= 0; 
         end
         T3: begin
-            if (second) begin
-                Grb <= 1; BAout <= 1; Yin <= 1;
-                #15 Grb <= 0; BAout <= 0; Yin <= 0;
-            end else begin
-							 // MDR -> IR
-					 Gra <= 1; Rout <= 1; PCin <=1;
-					 #15 Gra <= 0; Rout <= 0; PCin <= 0; 
-				end
+//            if (second) begin
+//                Grb <= 1; BAout <= 1; Yin <= 1;
+//                #15 Grb <= 0; BAout <= 0; Yin <= 0;
+//            end else begin
+//							 // MDR -> IR
+//					 Gra <= 1; Rout <= 1; PCin <=1;
+//					 #15 Gra <= 0; Rout <= 0; PCin <= 0; 
+//				end
+					 // MDR -> IR
+				 Gra <= 1; Rout <= 1; PCin <=1;
+				 #15 Gra <= 0; Rout <= 0; PCin <= 0; 
         end
         T4: begin
             if (second) begin
