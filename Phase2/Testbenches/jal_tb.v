@@ -61,7 +61,9 @@ module new_datapath_tb;
                 Cout <= 0; IN_portout <= 0;
                 Gra <= 0; Grb <= 0; Grc <= 0; Rout <= 0; BAout <= 0; Rin <= 0;
                 s_d_en <= 1; CONin <= 0; OUT_portin <= 0; Strobe <= 0;
-                write <= 0; PCin <= 0; 
+                write <= 0; PCin <= 0; PCinc<=0;
+					 
+					 force R5 = 32'h0000000E;
             end
 
             // Instruction fetch cycle (JAL-specific)
@@ -77,26 +79,29 @@ module new_datapath_tb;
             end
             T2: begin
                 // Transfer instruction from MDR to IR (IR = instruction register)
-                MDRout <= 1; IRin <= 1;
-                #15 MDRout <= 0; IRin <= 0;
+                MDRout <= 1; IRin <= 1; PCinc <= 1;
+                #15 MDRout <= 0; IRin <= 0;PCinc <= 0;
             end
 
             // JAL Specific Steps
             T3: begin
                 // Store the return address (PC+4) into R31 (for jal, we use $ra register which is R31)
-                Gra <= 1; Rin <= 1; // Store return address (PC+4) into R31
-                PCinc <= 1; PCout <= 1;
-                #15 Gra <= 0; Rin <= 0; PCinc <= 0; PCout <= 0;
+//                Gra <= 1; Rout <= 1; // Store return address (PC+4) into R31    ALUcontrol <= 5'b00011;
+                 PCout <= 1; Yin <= 1; 
+                #15 PCout <= 0; Yin <= 0;
             end
             T4: begin
                 // Set PC to the target address from the instruction
-                PCin <= 1; // Jump to the target address
-                #15 PCin <= 0;
+//                PCin <= 1; // Jump to the target address
+//                #15 PCin <= 0;
+						Gra <= 1; Rout <= 1; ALUControl <= 5'b00011; Zin <= 1;
+						#15 Gra <= 0; Rout <= 0;Zin <= 0;
+						
             end
             T5: begin
                 // End the instruction (no further control signals needed)
-                write <= 1;
-                #15 write <= 0;
+                Zloout<=1; PCin <= 1;
+                #15 Zloout<=0; PCin <= 0;
             end
 
             default: begin
