@@ -1,13 +1,14 @@
 `timescale 1ns/10ps
-module ldi_tb;
+module new_datapath_tb;
 
     // Control Signals
-    reg HIin, HIout, LOin, LOout, PCin, PCout, IRin, Zin, Zhiout, Zloout, Yin, MARin, MDRin, MDRout, Read, Clock, GlobalReset, write;
-    reg Gra, Grb, Grc, Rout, Rin, BAout, s_d_en, CONin, CONout, OUT_portin, Strobe, IN_portout, Cout;
+    reg HIin, HIout, LOin, LOout, PCinc, PCout, IRin, Zin, Zhiout, Zloout, Yin, MARin, MDRin, MDRout, Read, Clock, GlobalReset, write;
+    reg Gra, Grb, Grc, Rout, Rin, BAout, s_d_en, CONin, OUT_portin, Strobe, IN_portout, Cout, PCin;
     reg [4:0] ALUControl;
 
     // Datapath Outputs
     wire Zero;
+    wire CONout;
     wire [31:0] R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15;
     wire [31:0] HI, LO, IR, PC, BusMuxOut, Y;
     wire [63:0] Z;
@@ -18,10 +19,10 @@ module ldi_tb;
 
     // Instantiate the datapath
     new_datapath DUT(
-        .HIin(HIin), .HIout(HIout), .LOin(LOin), .LOout(LOout), .PCin(PCin), .PCout(PCout), 
+        .HIin(HIin), .HIout(HIout), .LOin(LOin), .LOout(LOout), .PCinc(PCinc), .PCout(PCout), 
         .IRin(IRin), .Zin(Zin), .Zhiout(Zhiout), .Zloout(Zloout), .Yin(Yin), .MARin(MARin), 
         .MDRin(MDRin), .MDRout(MDRout), .Read(Read), .Clock(Clock), .GlobalReset(GlobalReset),
-        .ALUControl(ALUControl),
+        .ALUControl(ALUControl), .PCin(PCin),
         .Zero(Zero), .R0(R0), .R1(R1), .R2(R2), .R3(R3), .HI(HI), .LO(LO), .IR(IR), .PC(PC), .BusMuxOut(BusMuxOut), .Z(Z), .Y(Y),
         .R4(R4), .R5(R5), .R6(R6), .R7(R7), .R8(R8), .R9(R9), .R10(R10), .R11(R11), .R12(R12), .R13(R13), .R14(R14), .R15(R15),
         .Cout(Cout), .write(write), .Gra(Gra), .Grb(Grb), .Grc(Grc), .Rout(Rout), .Rin(Rin), .BAout(BAout), .s_d_en(s_d_en), 
@@ -54,11 +55,12 @@ module ldi_tb;
         case (Present_State)
             // Default state
             Default: begin
-                HIin <= 0; HIout <= 0; LOin <= 0; LOout <= 0; PCin <= 0; PCout <= 0;
-                IRin <= 0; Zin <= 0; Zhiout <= 0; Zloout <= 0; Yin <= 0; MARin <= 0; 
-                MDRin <= 0; MDRout <= 0; Read <= 0; GlobalReset <= 0; write <= 0;
-                Gra <= 0; Grb <= 0; Grc <= 0; Rout <= 0; Rin <= 0; BAout <= 0; s_d_en <= 1;
-                CONin <= 0; CONout <= 0; OUT_portin <= 0; Strobe <= 0; IN_portout <= 0;
+                HIin <= 0; HIout <= 0; LOin <= 0; LOout <= 0; PCinc <= 0; PCout <= 0; 
+                IRin <= 0; Zin <= 0; Zhiout <= 0; Zloout <= 0; Yin <= 0; MARin <= 0; MDRin <= 0; MDRout <= 0; Read <= 0; GlobalReset <= 0;
+                Cout <= 0; IN_portout <= 0;
+                Gra <= 0; Grb <= 0; Grc <= 0; Rout <= 0; BAout <= 0; Rin <= 0;
+                s_d_en <= 1; CONin <= 0; OUT_portin <= 0; Strobe <= 0;
+                write <= 0; PCin <= 0; 
             end
 
             // Instruction fetch cycle (LDI-specific)
