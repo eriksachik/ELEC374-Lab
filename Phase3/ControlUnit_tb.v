@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module ControlUnit_tb();
+module control_unit_tb();
 		reg clk,reset,stop;
 		reg [31:0] inport_data;
 		wire [31:0] outport_data;
