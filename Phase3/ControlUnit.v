@@ -132,12 +132,12 @@ module control_unit (
             T2: begin MDRout = 1; IRin = 1; PCin = 1; #15 MDRout = 0; IRin = 0; PCin = 0; end
 
             // ADD Instruction example
-            ADD_T3: begin Grb = 1; Rout = 1; Yin = 1; end
-            ADD_T4: begin Grc = 1; Zin = 1; end
-            ADD_T5: begin Zloout = 1; Gra = 1; Rin = 1; end
+            ADD_T3: begin Grb = 1; Rout = 1; Yin = 1; #15 Grb = 0; Rout = 0; Yin = 0; end
+            ADD_T4: begin Grc = 1; Zin = 1; #15 Grc = 0; Zin = 0; end
+            ADD_T5: begin Zloout = 1; Gra = 1; Rin = 1; #15 Zloout = 0; Gra = 0; Rin = 0; end
 				
 				// ADDI Instruction example
-            ADDI_T3: begin Grb = 1; BAout = 1; Yin = 1; #15 Grb = 1; BAout = 1; Yin = 1; end
+            ADDI_T3: begin Grb = 1; BAout = 1; Yin = 1; #15 Grb = 0; BAout = 0; Yin = 0; end
             ADDI_T4: begin Cout = 1; Rout = 1; Zin = 1; #15 Cout = 0; Rout = 0; Zin = 0; end
             ADDI_T5: begin Zloout = 1; Gra = 1; Rin = 1; #15 Zloout = 0; Gra = 0; Rin = 0; end
 				
@@ -182,7 +182,7 @@ module control_unit (
             ST_T3: begin Gra = 1; BAout = 1; Yin = 1; #15 Gra = 0; BAout = 0; Yin = 0; end
             ST_T4: begin Cout = 1; Zin = 1; #15 Cout = 0; Zin = 0; end
             ST_T5: begin Zloout = 1; MARin = 1; end
-            ST_T6: begin Grb = 1; Rout = 1; MDRin = 1; #15 Grb = 1; Rout = 1; MDRin = 1; end
+            ST_T6: begin Grb = 1; Rout = 1; MDRin = 1; #15 Grb = 0; Rout = 0; MDRin = 0; end
             ST_T7: begin write = 1; #35 write = 0; end
 
             // Special
